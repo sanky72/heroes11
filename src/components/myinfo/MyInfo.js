@@ -50,7 +50,7 @@ export function MyInfo() {
     setValue("email", user?.email);
     setValue("username", user?.username);
     setValue("phoneNumber", user?.phonenumber);
-    setValue("password", user?.password);
+    setValue("password", "");
     setValue("country", "india");
   }, [user]);
   useEffect(() => {
