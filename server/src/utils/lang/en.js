@@ -70,4 +70,5 @@ export default {
   "00093": "Team saved successfully.",
   "00094": "Data fetched successfully.",
   "00095": "Data saved successfully.",
+  "00096": "Contest already joined",
 };

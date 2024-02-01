@@ -1,4 +1,6 @@
+import { ObjectId } from "mongodb";
 import { ContestTeamMapping } from "../../../models/contest-team-mapping.js";
+import { Contest } from "../../../models/contest.js";
 import { Match } from "../../../models/index.js";
 import { getText } from "../../../utils/index.js";
 
@@ -7,20 +9,16 @@ export default async (req, res) => {
 
   try {
     const contests = await ContestTeamMapping.find({
-      user_id: userId,
+      "teams.user_id": userId,
       match_id: matchId,
     });
     const contestsWithMatchData = await Promise.all(
       contests.map(async (contest) => {
         const matchId = contest.match_id;
         const matchData = await fetchMatchData(matchId);
-        const matchInfo = {
-          team_a: matchData.team_a,
-          team_b: matchData.team_b,
-          ground_name: matchData.ground_name,
-          tournament_name: matchData.tournament_name,
-        };
-        return { ...contest.toObject(), matchData };
+        const contestData = await fetchContestData(contest.contest_id);
+
+        return { ...contest.toObject(), matchData, contestData };
       })
     );
     return res.status(200).json({
@@ -36,6 +34,13 @@ async function fetchMatchData(matchId) {
   if (!matchId) return {};
   const matchData = await Match.findOne({ match_id: Number(matchId) });
   return matchData;
+}
+async function fetchContestData(contestId) {
+  if (!contestId) return {};
+  const contestData = await Contest.findOne({
+    _id: new ObjectId(contestId),
+  });
+  return contestData;
 }
 
 /**

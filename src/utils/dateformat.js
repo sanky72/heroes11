@@ -53,6 +53,7 @@ export function sameDayorNot(a, b) {
 export function isTommorrow(a, b) {
   const first = new Date(a);
   const second = new Date(b);
+  return true;
   if (
     first.getDate() == second.getDate() - 1 &&
     first.getDay() == second.getDay() - 1 &&

@@ -76,14 +76,28 @@ export default function ConfirmModal({
   };
   const join = async () => {
     try {
+      const entryFee = modal.price / modal.totalSpots;
+      await API.post(`${URL}/payment/deduct`, {
+        amount: entryFee,
+      });
+
       const data = await API.post(`${URL}/contest/join`, {
-        userId: user._id,
-        teams: [{ team_id: teamid }],
+        team: {
+          team_id: teamid,
+          user_id: user._id,
+          username: user.username,
+          rank: 1,
+          points: 0,
+        },
+
+        user_id: user._id,
         contestId: modal._id,
         matchId: id,
-        entryFee: modal.price / modal.totalSpots,
+        entryFee,
+        totalSpots: modal.totalSpots,
       });
-      window.store.dispatch(showToast("Joined contest successfully"));
+      console.log("CONTEST JOINED", data.data.resultMessage.en);
+      window.store.dispatch(showToast(data.data.resultMessage.en, "error"));
       loadJoined();
       setSelectedTeam(null);
       setOpen(false);

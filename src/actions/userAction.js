@@ -39,14 +39,15 @@ API.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      // if (error.response.status === 401) {
-      //   window.store.dispatch(logout());
-      // }
+      
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       const { status, data = {} } = error.response;
       const message = data.resultMessage?.en || `Error: ${status}`;
       window.store.dispatch(showToast(message, "error"));
+      if (error.response.status === 401 && window.location.pathname!=="/login") {
+        window.open(`${window.location.origin}/login`,"_self");
+      }
     } else if (error.request) {
       // The request was made but no response was received
       window.store.dispatch(showToast("No response received", "error"));

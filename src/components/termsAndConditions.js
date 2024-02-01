@@ -8,7 +8,7 @@ const TermsAndConditions = () => {
         <h1>Mefigure11 Terms and Conditions</h1>
 
         <p>
-          Welcome to www.mefigure11.com! These Terms and Conditions ("Terms")
+          Welcome to www.myheroes11.in! These Terms and Conditions ("Terms")
           govern your use of our fantasy platform and related services. By
           accessing or using our services, you agree to comply with and be bound
           by these Terms. If you do not agree with these Terms, please do not
@@ -124,7 +124,7 @@ const TermsAndConditions = () => {
             <p>
               If you have any questions or concerns about these Terms, please
               contact us at{" "}
-              <a href="mailto:mefigure11@gmail.com">mefigure11@gmail.com</a>.
+              <a href="mailto:12malkeet@gmail.com">12malkeet@gmail.com</a>.
             </p>
           </li>
         </ol>

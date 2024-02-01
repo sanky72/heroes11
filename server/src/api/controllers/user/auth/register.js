@@ -50,7 +50,7 @@ export default async (req, res) => {
     req.body.language,
     "register",
     req,
-    res
+    res,
   );
 
   let username = "";
@@ -81,6 +81,7 @@ export default async (req, res) => {
     countryCode: geo == null ? "US" : geo.country,
     lastLogin: Date.now(),
     authenticationType: authenticationType || "normal",
+    wallet: 50,
   });
 
   user = await user.save().catch((err) => {

@@ -11,12 +11,25 @@ const ContestTeamMappingSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      user_id: {
+        type: String,
+        required: true,
+      },
+      points: {
+        type: Number,
+        required: true,
+      },
+      username: {
+        type: String,
+        required: true,
+      },
+      rank: {
+        type: Number,
+        required: true,
+      },
     },
   ],
-  user_id: {
-    type: String,
-    required: true,
-  },
+
   contest_id: {
     type: String,
     required: true,

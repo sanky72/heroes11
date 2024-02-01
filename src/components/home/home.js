@@ -5,7 +5,7 @@ import NotificationAddOutlinedIcon from "@mui/icons-material/NotificationAddOutl
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { GrMultimedia } from "react-icons/gr";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getMatches } from "../../data/getMatches";
 import { getDisplayDate } from "../../utils/dateformat";
@@ -14,6 +14,7 @@ import Navbar from "../navbar";
 import Bottomnav from "../navbar/bottomnavbar";
 import "./home.css";
 import Match from "./match";
+import { loadUser } from "../../actions/userAction";
 
 const RightSide = styled.div`
   width: 90px;
@@ -66,10 +67,10 @@ const DeatilTop = styled.div`
 `;
 
 const CricketBg = styled.div`
-  background-image: url("./cricketbg.jpg");
+  background-image: url("https://referandearns.in/wp-content/uploads/2022/06/image9-1.png");
   box-sizing: border-box;
   padding: 10px 10px;
-  height: 150px;
+  height: 210px;
   margin-bottom: 60px;
   position: relative;
   background-size: cover;
@@ -120,6 +121,8 @@ export function Home() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     async function getupcoming() {
       if (user?._id) {
@@ -157,23 +160,16 @@ export function Home() {
   const handleClick = () => {
     setOpen(true);
   };
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
+
   return (
     <>
       <Navbar home />
       <div className="homecontainer">
         <CricketBg id="section1">
-          <TopDiv>
-            <h3 style={{ color: "#FFFFFF", position: "relative" }}>
-              My Matches
-            </h3>
-            <ViewAll
-              style={{ display: "flex", alignItems: "center" }}
-              onClick={() => navigate(`/completed/${user?._id}`)}
-            >
-              View All
-              <ArrowForwardIosIcon style={{ fontSize: "12px" }} />
-            </ViewAll>
-          </TopDiv>
           {pastLoading ? (
             <div className="loadContainer">
               {" "}
@@ -185,7 +181,15 @@ export function Home() {
                 u && (
                   <div
                     className="matchcontainere"
-                    onClick={() => navigate(`/contests/${u.id}`)}
+                    onClick={() => {
+                      debugger;
+                      console.log({ u });
+                      return navigate(`/contests/${u.match_id}`, {
+                        state: {
+                          u,
+                        },
+                      });
+                    }}
                     style={{
                       postion: "absolute !important",
                       backgroundColor: "#000",
@@ -320,7 +324,7 @@ export function Home() {
                 )
             )
           ) : (
-            <div className="notfound">no matches found</div>
+            <div></div>
           )}
         </CricketBg>
         {live?.length > 0 && (

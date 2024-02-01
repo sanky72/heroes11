@@ -138,7 +138,13 @@ export function Match({ u, live }) {
   return (
     <div
       className="matchcontainer"
-      onClick={() => navigate(`/contests/${u.match_id}`)}
+      onClick={() => {
+        return navigate(`/contests/${u.match_id}`, {
+          state: {
+            u,
+          },
+        });
+      }}
     >
       <Top>
         <h5

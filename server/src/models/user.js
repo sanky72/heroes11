@@ -91,10 +91,13 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    wallet: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const User = model("User", userSchema);
