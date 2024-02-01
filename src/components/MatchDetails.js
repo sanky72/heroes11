@@ -29,13 +29,16 @@ const TopContainer = styled.div`
   }
   padding: 10px 20px;
   position: fixed;
-  height: 160px;
+  height: 50px;
   top: 0;
   left: 0;
   width: 100%;
   max-width: 550px;
   z-index: 1000;
   box-sizing: border-box;
+  display : flex;
+  align-items: center;
+
 `;
 
 const GreenMark = styled.span`
@@ -50,13 +53,14 @@ const Top = styled.div`
   background-color: var(--black);
   color: #ffffff;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   padding-bottom: 2px;
 `;
 
 const Bottom = styled.div`
-  margin-top: 150px;
+  margin-top: 65px;
   z-index: 10;
 `;
 const LeftSide = styled.div`
