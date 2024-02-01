@@ -96,7 +96,7 @@ export function ContestDetail() {
       if (id.length > 3) {
         
         const contestdata = await API.get(
-          `${URL}/contest/contest/prizes/${id}`
+          `${URL}/match/contest/prizes/${id}`
         );
         const teamdata = await API.get(`${URL}/match/leaderboard?contest_id=${id}&match_id=${contestdata?.data?.contest?.matchId}`);
         console.log("aekfbj", teamdata);
