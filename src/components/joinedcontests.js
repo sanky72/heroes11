@@ -18,6 +18,7 @@ const Top = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  max-width: 550px;
   padding: 15px 0;
 `;
 

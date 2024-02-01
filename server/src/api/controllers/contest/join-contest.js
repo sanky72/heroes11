@@ -58,8 +58,8 @@ export default async (req, res) => {
       );
     }
     return res.status(200).json({
-      resultMessage: { en: getText("en", "00093") },
-      code: "00093",
+      resultMessage: { en: getText("en", "00097") },
+      code: "00097",
     });
   } catch (error) {
     console.error("Error creating Contests:", error);
