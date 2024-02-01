@@ -13,6 +13,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { URL } from "../constants/userConstants";
 import ContestTabs from "./ContestTabs";
 import Contest from "./contests/contest";
+import { API } from "../actions/userAction";
+import { useSelector } from "react-redux";
 
 const Top = styled.div`
   background-color: var(--black);
@@ -83,17 +85,20 @@ export function ContestDetail() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [match, setMatch] = useState(null);
   const [contest, setContest] = useState(null);
+  const {user} = useSelector((state) => state.user);
   const { id } = useParams();
   const history = useNavigate();
+  
   useEffect(() => {
-    async function getteams() {
+  async function getteams() {
       if (id.length > 3) {
-        const teamdata = await axios.get(`${URL}/getteamsofcontest/${id}`);
-        const contestdata = await axios.get(`${URL}/getcontest/${id}`);
+        // const teamdata = await axios.get(`${URL}/getteamsofcontest/${id}`);
+        const contestdata = await API.get(`${URL}/contest/contest/prizes/${id}`);
+        console.log("aekfbj",contestdata);
         setContest(contestdata.data.contest);
-        setMatch(teamdata.data.match);
-        const t = teamdata.data.teams.sort((a, b) => a.points - b.points);
-        setLeaderboard([...t]);
+        // setMatch(teamdata.data.match);
+        // const t = teamdata.data.teams.sort((a, b) => a.points - b.points);
+        // setLeaderboard([...t]);
       }
     }
     getteams();

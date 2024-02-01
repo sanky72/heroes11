@@ -242,12 +242,16 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const [value, setValue] = React.useState(0);
   const navigate = useNavigate();
-
+// const [stateContest, setStateContest] = React.useState(contest);
+// React.useEffect(()=> {
+// setStateContest(contest);
+// },[contest]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   console.log(match_details, "leaderboard");
   leaderboardChanges(leaderboard);
+  console.log("the contest in tabs is",contest);
   return (
     <Container style={{ width: "100%" , marginTop: "100px"}}>
       <Tabs
@@ -267,13 +271,16 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
                 <th>Rank</th>
                 <th>Winnings</th>
               </tr>
-              {contest &&
-                contest.prizeDetails.map((p, index) => (
+              {contest && contest.prizeDetails &&
+                contest.prizeDetails.map((p, index) => {
+                  console.log("contest here is",contest);
+                  return (
                   <tr>
-                    <td>{index + 1}</td>
-                    <td>₹{p.prize}</td>
+                    <td>{p?.rank}</td>
+                    <td>₹{p?.prize}</td>
                   </tr>
-                ))}
+                )})
+              }
             </table>
           </First>
         </ContestsContainer>
@@ -289,7 +296,7 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
               <th>Rank</th>
             </tr>
 
-            {leaderboard.length > 0 &&
+            {leaderboard?.length > 0 &&
               leaderboard
                 .sort((a, b) => b._doc.points - a._doc.points)
                 .map((f, index) => (
