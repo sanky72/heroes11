@@ -252,6 +252,7 @@ export function Completed() {
                               navigate(`/contests/${u.match_id}`, {
                                 state: {
                                   selectedTab: 1,
+                                  u,
                                 },
                               })
                             }
@@ -406,7 +407,14 @@ export function Completed() {
                       {past.map((u) => (
                         <div
                           className="matchcontainer"
-                          onClick={() => navigate(`/contests/${u.match_id}`)}
+                          onClick={() =>
+                            navigate(`/contests/${u.match_id}`, {
+                              state: {
+                                u,
+                                selectedTab: 1,
+                              },
+                            })
+                          }
                           style={{
                             position: "absolute !important",
                             backgroundColor: "#000",

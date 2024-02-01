@@ -82,7 +82,6 @@ function Payment() {
     const response = await Axios.get(API_URL);
     const { data } = response;
     console.log("rajesh");
-    console.log(response);
     const options = {
       key: "rzp_test_3FLuLisPuowtZP",
       name: "RazorPay",
@@ -138,7 +137,7 @@ function Payment() {
   const addAmount = async () => {
     try {
       await API.post(`${URL}/payment/add`, { amount });
-
+      window.store.dispatch(showToast("Money added successfully"));
       navigate("/");
     } catch (error) {
       console.log(error);

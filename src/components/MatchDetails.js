@@ -175,7 +175,9 @@ const AddButton = styled(Button)`
 export function MatchDetails({ players }) {
   const { state } = useLocation();
   console.log("state match", state?.u);
-  const user = state?.u;
+  const { user, isAuthenticated, loading, error } = useSelector(
+    (state) => state.user
+  );
   const { match_details, matchlive } = useSelector((state) => state.match);
   const [contests, setContests] = useState([]);
   const dispatch = useDispatch();
@@ -285,7 +287,7 @@ export function MatchDetails({ players }) {
               </DetailTop>
               <AddButton
                 onClick={() =>
-                  navigate("/payment", {
+                  history("/payment", {
                     state: {
                       tab: "deposit",
                     },
@@ -307,7 +309,7 @@ export function MatchDetails({ players }) {
                   <Grid item sm={5} xx={5}>
                     <Button
                       onClick={() =>
-                        navigate("/transaction", {
+                        history("/transaction", {
                           state: {
                             tab: "withdrawal",
                           },
