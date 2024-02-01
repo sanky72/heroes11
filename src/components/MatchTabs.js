@@ -284,8 +284,9 @@ export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
   const { id: matchId } = useParams();
   const [value, setValue] = React.useState(selectedTab);
   const { user, isAuthenticated, loading, error } = useSelector(
-    (state) => state.user
+    (state) => state.user,
   );
+  const globalState = useSelector((state) => state);
   const { id } = useParams();
   const { match_details, matchlive } = useSelector((state) => state.match);
   const [open, setOpen] = React.useState(false);
@@ -314,11 +315,11 @@ export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
         // setContest([...joinedC.data.contests]);
         // setTeam([...data.data.team]);
         const teamData = await API.get(
-          `${URL}/user/teams?matchId=${matchId}&userId=${user._id}`
+          `${URL}/user/teams?matchId=${matchId}&userId=${user._id}`,
         );
         setTeam(teamData.data.teams);
         const contestData = await API.get(
-          `${URL}/contest/${user._id}/${matchId}`
+          `${URL}/contest/${user._id}/${matchId}`,
         );
         setContest(contestData.data.contests);
       }
@@ -329,7 +330,7 @@ export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
     async function getteams() {
       if (contest[0]?._id) {
         const teamdata = await API.get(
-          `${URL}/user/teams?matchId=${matchId}&userId=${user._id}`
+          `${URL}/user/teams?matchId=${matchId}&userId=${user._id}`,
         );
         setLeaderboard(teamdata.data.teams);
       }
@@ -358,7 +359,7 @@ export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
       if (!team?.length > 0) {
         setValue(2);
         window.store.dispatch(
-          showToast("create a team before joining contest!", "info")
+          showToast("create a team before joining contest!", "info"),
         );
       } else {
         setModal(i);
@@ -369,6 +370,10 @@ export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (user && user._id) loadJoined();
+  }, [user]);
 
   const handleJoin = async (t) => {
     console.log("join contest");
@@ -382,11 +387,13 @@ export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
   const loadJoined = async (t) => {
     console.log("join contest");
     const joinedC = await API.get(`${URL}/contest/${user._id}/${id}`);
+    console.log(joinedC);
     setContest([...joinedC.data.contests]);
     leaderboardChanges(joinedC.data.contests);
     setSelectTeams({ selected: false, team: t });
   };
   console.log(contest, matchlive, "match_details");
+  console.log("STATE", globalState);
   return (
     <div style={{ zIndex: "1" }}>
       {!selectTeams.selected ? (
@@ -499,7 +506,7 @@ export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
                             ₹
                             {Math.floor(
                               tab?.contestData?.price /
-                                tab?.contestData?.totalSpots
+                                tab?.contestData?.totalSpots,
                             )}
                           </p>
                         </div>
@@ -598,6 +605,7 @@ export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
               )}
             </ContestsContainer>
           </TabPanel>
+
           <TabPanel value={value} index={2}>
             {team?.length > 0 &&
               team.map((t, index) => <TeamShort t={t} index={index} />)}

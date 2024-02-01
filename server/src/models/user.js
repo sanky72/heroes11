@@ -87,10 +87,13 @@ const userSchema = new Schema(
     deletedAt: {
       type: Date,
     },
+    wallet: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const User = model("User", userSchema);

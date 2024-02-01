@@ -5,7 +5,7 @@ import NotificationAddOutlinedIcon from "@mui/icons-material/NotificationAddOutl
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { GrMultimedia } from "react-icons/gr";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getMatches } from "../../data/getMatches";
 import { getDisplayDate } from "../../utils/dateformat";
@@ -14,6 +14,7 @@ import Navbar from "../navbar";
 import Bottomnav from "../navbar/bottomnavbar";
 import "./home.css";
 import Match from "./match";
+import { loadUser } from "../../actions/userAction";
 
 const RightSide = styled.div`
   width: 90px;
@@ -120,6 +121,8 @@ export function Home() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     async function getupcoming() {
       if (user?._id) {
@@ -157,6 +160,11 @@ export function Home() {
   const handleClick = () => {
     setOpen(true);
   };
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
+
   return (
     <>
       <Navbar home />
@@ -305,7 +313,7 @@ export function Home() {
                       </div>
                     </div>
                   </div>
-                )
+                ),
             )
           ) : (
             <div></div>

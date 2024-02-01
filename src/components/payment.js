@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { URL } from "../constants/userConstants";
+import { API } from "../actions/userAction";
 
 const Wrapper = styled.div`
   font-family: system-ui !important;
@@ -134,6 +135,16 @@ function Payment() {
       });
   };
 
+  const addAmount = async () => {
+    try {
+      await API.post(`${URL}/payment/add`, { amount });
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Container>
       <Title>Add Amount</Title>
@@ -143,7 +154,15 @@ function Payment() {
         placeholder="amount to be added"
         size="small"
       />
-      <button className="paybtn" onClick={handlePayment}>
+      <button
+        className="paybtn"
+        onClick={(e) => {
+          e.preventDefault();
+          if (amount) {
+            addAmount();
+          }
+        }}
+      >
         Pay
       </button>
     </Container>

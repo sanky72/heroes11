@@ -44,7 +44,7 @@ export default async (req, res) => {
     req.body.language,
     "register",
     req,
-    res
+    res,
   );
 
   let username = "";
@@ -74,6 +74,7 @@ export default async (req, res) => {
     phoneNumber: req.body.phoneNumber,
     countryCode: geo == null ? "US" : geo.country,
     lastLogin: Date.now(),
+    wallet: 50,
   });
 
   user = await user.save().catch((err) => {
