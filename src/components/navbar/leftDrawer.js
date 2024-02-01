@@ -192,10 +192,10 @@ export default function LeftDrawer({ leftOpen, setLeftOpen, open, setOpen }) {
             Balance
           </ListI>
           <ListI onClick={() => handleLogout()}>
-            <LogoutIcon style={{ width: "60px" }} /> Logout
+            <LogoutIcon style={{ width: "60px"}} /> Logout
           </ListI>
-          <ListI onClick={() => navigate("/findpeople")}>
-            <BoyOutlined style={{ width: "60px" }} /> Find People
+          <ListI style={{cursor: "no-drop" , background: "#dddddd"}} >
+            <BoyOutlined style={{ width: "60px"}} /> Find People
           </ListI>
           <ListI onClick={() => navigate("/my-info")}>
             <SettingsOutlinedIcon style={{ width: "60px" }} />
