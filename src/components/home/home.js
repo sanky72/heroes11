@@ -66,7 +66,7 @@ const DeatilTop = styled.div`
 `;
 
 const CricketBg = styled.div`
-  background-image: url("./cricketbg.jpg");
+  background-image: url("https://i1.wp.com/amicafest.com/wp-content/uploads/2018/02/Refer-and-earn_website-image_2.png?fit=1200%2C371&ssl=1");
   box-sizing: border-box;
   padding: 10px 10px;
   height: 150px;
@@ -161,11 +161,8 @@ export function Home() {
     <>
       <Navbar home />
       <div className="homecontainer">
-        <CricketBg id="section1">
+        <CricketBg id="section1" >
           <TopDiv>
-            <h3 style={{ color: "#FFFFFF", position: "relative" }}>
-              My Matches
-            </h3>
             <ViewAll
               style={{ display: "flex", alignItems: "center" }}
               onClick={() => navigate(`/completed/${user?._id}`)}
@@ -320,7 +317,7 @@ export function Home() {
                 )
             )
           ) : (
-            <div className="notfound">no matches found</div>
+            <div></div>
           )}
         </CricketBg>
         {live?.length > 0 && (
