@@ -5,10 +5,10 @@ export default async (req, res) => {
   const payload = req.body;
   const {
     contestId: contest_id,
-    userId: user_id,
-    teamId: team_id,
+    user_id,
+    team_id,
     matchId: match_id,
-    teams,
+    team,
   } = payload;
 
   try {
@@ -17,18 +17,46 @@ export default async (req, res) => {
     //   (playerData) => new Player(playerData)
     // );
 
-    const contestInstance = new ContestTeamMapping({
-      teams: teams,
-      // Include other fields from the payload if needed
+    // Check if the user_id exists in the collection
+    const existingRecordUser = await ContestTeamMapping.findOne({
+      "teams.user_id": user_id,
       match_id,
-      team_id,
       contest_id,
-      user_id,
+    });
+    if (existingRecordUser) {
+      return res.status(200).json({
+        resultMessage: { en: getText("en", "00096") },
+        code: "00096",
+      });
+    }
+    const existingRecord = await ContestTeamMapping.findOne({
+      // "teams.user_id": user_id,
+      match_id,
+      contest_id,
     });
 
-    const savedContest = await contestInstance.save();
-    console.log("Contest saved to the database:", savedContest);
+    if (!existingRecord) {
+      const contestInstance = new ContestTeamMapping({
+        teams: [team],
+        // Include other fields from the payload if needed
+        match_id,
+        team_id,
+        contest_id,
+        user_id,
+      });
 
+      const savedContest = await contestInstance.save();
+      console.log("Contest saved to the database:", savedContest);
+    } else {
+      await ContestTeamMapping.updateOne(
+        { _id: existingRecord._id },
+        {
+          $push: {
+            teams: team,
+          },
+        }
+      );
+    }
     return res.status(200).json({
       resultMessage: { en: getText("en", "00093") },
       code: "00093",
