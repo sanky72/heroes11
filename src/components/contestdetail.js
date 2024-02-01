@@ -22,16 +22,18 @@ const Top = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 15px 0;
+  max-width: 550px;
   position: fixed;
   height: 50px;
   top: 0;
   left: 0;
+  padding: 15px 20px;
+  box-sizing: border-box;
 `;
 
 const Bottom = styled.div``;
 const LeftSide = styled.div`
-  width: 150px;
+  /* width: 150px; */
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -85,16 +87,18 @@ export function ContestDetail() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [match, setMatch] = useState(null);
   const [contest, setContest] = useState(null);
-  const {user} = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const { id } = useParams();
   const history = useNavigate();
-  
+
   useEffect(() => {
-  async function getteams() {
+    async function getteams() {
       if (id.length > 3) {
         // const teamdata = await axios.get(`${URL}/getteamsofcontest/${id}`);
-        const contestdata = await API.get(`${URL}/contest/contest/prizes/${id}`);
-        console.log("aekfbj",contestdata);
+        const contestdata = await API.get(
+          `${URL}/contest/contest/prizes/${id}`
+        );
+        console.log("aekfbj", contestdata);
         setContest(contestdata.data.contest);
         // setMatch(teamdata.data.match);
         // const t = teamdata.data.teams.sort((a, b) => a.points - b.points);
