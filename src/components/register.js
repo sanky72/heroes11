@@ -18,14 +18,6 @@ import { showToast } from "../actions/toastAction";
 import { LOGIN_SUCCESS, URL } from "../constants/userConstants";
 import Otp from "./otp";
 
-const PHONE_REGEX = new RegExp(
-  /"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"/gim
-);
-
-const Err = styled.p`
-  color: red;
-`;
-
 export function Register() {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user

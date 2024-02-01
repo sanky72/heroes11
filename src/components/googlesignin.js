@@ -40,7 +40,7 @@ export default function Logingoogle() {
       }}
     >
       <p style={{ textAlign: "center" }}>Google Oauth Sign In</p>
-      <GoogleOAuthProvider clientId="524341840994-1pl3pkmmcl6a1dfvmebev150oqdtb170.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId="524341840994-eg71u6e8soei0j5cid8r8iojrmh13qf6.apps.googleusercontent.com">
         <GoogleLogin
           onSuccess={(credentialResponse) => {
             console.log(credentialResponse);
