@@ -124,15 +124,6 @@ export function Navbar({ home }) {
           Heroes11
         </Center>
         <RightSide>
-          <NotificationAddOutlinedIcon
-            style={{
-              marginRight: "10px",
-              cursor: "pointer",
-              fontSize: "20px",
-              stroke: "white",
-              strokeWidth: "1.5",
-            }}
-          />
           <AccountBalanceWalletOutlinedIcon
             onClick={() => handleClick()}
             style={{
