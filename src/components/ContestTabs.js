@@ -249,7 +249,7 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
   console.log(match_details, "leaderboard");
   leaderboardChanges(leaderboard);
   return (
-    <Container style={{ width: "100%" }}>
+    <Container style={{ width: "100%" , marginTop: "100px"}}>
       <Tabs
         value={value}
         onChange={handleChange}
