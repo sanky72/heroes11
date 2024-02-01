@@ -169,7 +169,7 @@ export function Home() {
     <>
       <Navbar home />
       <div className="homecontainer">
-        <CricketBg id="section1" >
+        <CricketBg id="section1">
           {pastLoading ? (
             <div className="loadContainer">
               {" "}
@@ -181,7 +181,15 @@ export function Home() {
                 u && (
                   <div
                     className="matchcontainere"
-                    onClick={() => navigate(`/contests/${u.id}`)}
+                    onClick={() => {
+                      debugger;
+                      console.log({ u });
+                      return navigate(`/contests/${u.match_id}`, {
+                        state: {
+                          u,
+                        },
+                      });
+                    }}
                     style={{
                       postion: "absolute !important",
                       backgroundColor: "#000",
@@ -313,7 +321,7 @@ export function Home() {
                       </div>
                     </div>
                   </div>
-                ),
+                )
             )
           ) : (
             <div></div>

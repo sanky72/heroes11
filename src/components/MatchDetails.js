@@ -139,7 +139,7 @@ const BottomT = styled.div`
 `;
 export function MatchDetails({ players }) {
   const { state } = useLocation();
-
+  console.log("state match", state?.u);
   const { match_details, matchlive } = useSelector((state) => state.match);
   const [contests, setContests] = useState([]);
   const dispatch = useDispatch();
