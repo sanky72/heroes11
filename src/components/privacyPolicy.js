@@ -8,7 +8,7 @@ const PrivacyPolicy = () => {
         <h1>Mefigure11 Privacy Policy</h1>
 
         <p>
-          Welcome to the world of fantasy! At www.mefigure11.com, we are
+          Welcome to the world of fantasy! At www.12malkeet.com, we are
           committed to ensuring the privacy and security of your personal
           information. This Privacy Policy explains how we collect, use,
           disclose, and protect your information when you use our fantasy
@@ -133,7 +133,7 @@ const PrivacyPolicy = () => {
             <p>
               If you have any questions, concerns, or requests regarding this
               Privacy Policy, please contact us at{" "}
-              <a href="mailto:mefigure11@gmail.com">mefigure11@gmail.com</a>.
+              <a href="mailto:12malkeet@gmail.com">12malkeet@gmail.com</a>.
             </p>
           </li>
         </ol>

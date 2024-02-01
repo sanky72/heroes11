@@ -1,5 +1,5 @@
 import "./home.css";
-
+import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import styled from "@emotion/styled";
 import { SportsCricketOutlined } from "@mui/icons-material";
 import NotificationAddOutlinedIcon from "@mui/icons-material/NotificationAddOutlined";
@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { API } from "../actions/userAction";
+import placeholderImage from "../assets/abd.jpeg";
 import { URL } from "../constants/userConstants";
 import {
   getDisplayDate,
@@ -57,7 +58,13 @@ const Dot = styled.div`
   border-radius: 50%;
   margin-right: 5px;
 `;
-
+const EmptyStateContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  height: 50vh;
+`;
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -149,6 +156,8 @@ export function Completed() {
               match_result,
               team_b,
               match_start_time,
+              contest_id: contest.contest_id,
+              price: contest.contestData.price,
               contests: [],
             };
           }
@@ -181,6 +190,33 @@ export function Completed() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const renderEmptyState = () => {
+    return (
+      <EmptyStateContainer>
+        <h3
+          style={{
+            marginTop: "20px",
+          }}
+        >
+          You have not joined any matches yet
+        </h3>
+        <p
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <h4>Go to Home</h4>
+          <img
+            style={{ height: "26vh", margin: "15px 0 20px 0" }}
+            src={placeholderImage}
+          />
+          <h4>Checkout our match fixtures</h4>
+        </p>
+      </EmptyStateContainer>
+    );
+  };
   console.log(upcoming);
   return (
     <>
@@ -212,9 +248,15 @@ export function Completed() {
                         return (
                           <div
                             className="matchcontainer"
-                            onClick={() => navigate(`/contests/${u.id}`)}
+                            onClick={() =>
+                              navigate(`/contests/${u.match_id}`, {
+                                state: {
+                                  selectedTab: 1,
+                                },
+                              })
+                            }
                             style={{
-                              postion: "absolute !important",
+                              position: "absolute !important",
                               backgroundColor: "#000",
                             }}
                           >
@@ -250,83 +292,54 @@ export function Completed() {
                                     u.match_result ? "completed" : "time"
                                   }
                                 >
-                                  {u.match_result && (
-                                    <div
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      flexDirection: "column",
+                                    }}
+                                  >
+                                    <p
                                       style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        flexDirection: "column",
+                                        color: "#5e5b5b",
+                                        textTransform: "auto",
+                                        fontSize: "10px",
+                                        marginTop: "2px",
                                       }}
                                     >
-                                      <p
-                                        style={{
-                                          color: "#5e5b5b",
-                                          textTransform: "auto",
-                                          fontSize: "10px",
-                                          marginTop: "2px",
-                                        }}
-                                      >
-                                        {!u.match_result ? (
-                                          sameDayorNot(
-                                            new Date(),
-                                            new Date(u.matchData.startTime)
-                                          ) ||
-                                          isTommorrow(
-                                            new Date(),
-                                            new Date(u.matchData.startTime)
-                                          ) ? (
-                                            <div>
-                                              <p>
-                                                {hoursRemaining(
-                                                  u.matchData.startTime,
-                                                  "k",
-                                                  date
-                                                )}
-                                              </p>
-                                              <p
-                                                style={{
-                                                  color: "#5e5b5b",
-                                                  textTransform: "auto",
-                                                  fontSize: "10px",
-                                                  marginTop: "2px",
-                                                }}
-                                              >
-                                                {getDisplayDate(
-                                                  u.matchData.startTime,
-                                                  "i",
-                                                  date
-                                                ) &&
-                                                  getDisplayDate(
-                                                    u.matchData.startTime,
-                                                    "i",
-                                                    date
-                                                  )}
-                                              </p>
-                                            </div>
-                                          ) : (
-                                            <p
-                                              style={{
-                                                color: "#e10000",
-                                                textTransform: "auto",
-                                              }}
-                                            >
-                                              {getDisplayDate(
-                                                u.matchData.startTime,
-                                                "i"
-                                              ) &&
-                                                getDisplayDate(
-                                                  u.matchData.startTime,
-                                                  "i"
-                                                )}
-                                            </p>
-                                          )
+                                      {!u.match_result ? (
+                                        sameDayorNot(
+                                          new Date(),
+                                          new Date(u.match_start_time)
+                                        ) ||
+                                        isTommorrow(
+                                          new Date(),
+                                          new Date(u.match_start_time)
+                                        ) ? (
+                                          renderDate(u)
                                         ) : (
-                                          "Completed"
-                                        )}
-                                      </p>
-                                    </div>
-                                  )}
+                                          <p
+                                            style={{
+                                              color: "#e10000",
+                                              textTransform: "auto",
+                                            }}
+                                          >
+                                            {getDisplayDate(
+                                              u.match_start_time,
+                                              "i"
+                                            ) &&
+                                              getDisplayDate(
+                                                u.match_start_time,
+                                                "i"
+                                              )}
+                                          </p>
+                                        )
+                                      ) : (
+                                        "Completed"
+                                      )}
+                                    </p>
+                                  </div>
                                 </div>
                                 <div className="matchrights">
                                   <h5>{u.team_b}</h5>
@@ -378,10 +391,14 @@ export function Completed() {
                         );
                       })}
                     </>
-                  ) : null}
+                  ) : (
+                    renderEmptyState()
+                  )}
                 </div>
               </TabPanel>
-              <TabPanel value={value} index={1}></TabPanel>
+              <TabPanel value={value} index={1}>
+                {renderEmptyState()}
+              </TabPanel>
               <TabPanel value={value} index={2}>
                 <div className="matches">
                   {past?.length > 0 ? (
@@ -389,9 +406,9 @@ export function Completed() {
                       {past.map((u) => (
                         <div
                           className="matchcontainer"
-                          onClick={() => navigate(`/contests/${u.id}`)}
+                          onClick={() => navigate(`/contests/${u.match_id}`)}
                           style={{
-                            postion: "absolute !important",
+                            position: "absolute !important",
                             backgroundColor: "#000",
                           }}
                         >
@@ -465,7 +482,7 @@ export function Completed() {
                                       }}
                                     >
                                       {getDisplayDate(
-                                        u.matchData.startTime,
+                                        u.match_start_time,
                                         "i",
                                         date
                                       )}
@@ -543,7 +560,9 @@ export function Completed() {
                         </div>
                       ))}
                     </>
-                  ) : null}
+                  ) : (
+                    renderEmptyState()
+                  )}
                 </div>
               </TabPanel>
             </Box>
@@ -555,6 +574,36 @@ export function Completed() {
       <Bottomnav />
     </>
   );
+
+  function renderDate(u) {
+    return (
+      <div>
+        {/* <p>{hoursRemaining(u.match_start_time, "k", date)}</p> */}
+        <p
+          style={{
+            color: "green",
+            textTransform: "auto",
+            fontSize: "10px",
+          }}
+        >
+          {getDisplayDate(u.match_start_time, "i", date) &&
+            getDisplayDate(u.match_start_time, "i", date)}
+        </p>
+        <p
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <EmojiEventsOutlinedIcon
+            style={{ fontSize: "small", marginRight: "4px" }}
+          />
+          &#8377; {u.price}
+        </p>
+      </div>
+    );
+  }
 }
 
 export default Completed;

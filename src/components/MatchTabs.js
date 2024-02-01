@@ -280,9 +280,9 @@ function a11yProps(index) {
   };
 }
 
-export default function MatchTabs({ tabs, g, livescore }) {
+export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
   const { id: matchId } = useParams();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(selectedTab);
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
@@ -317,6 +317,10 @@ export default function MatchTabs({ tabs, g, livescore }) {
           `${URL}/user/teams?matchId=${matchId}&userId=${user._id}`
         );
         setTeam(teamData.data.teams);
+        const contestData = await API.get(
+          `${URL}/contest/${user._id}/${matchId}`
+        );
+        setContest(contestData.data.contests);
       }
     }
     getplayers();
@@ -483,18 +487,19 @@ export default function MatchTabs({ tabs, g, livescore }) {
                     <ContestJ>
                       <First>
                         <div>
-                          <p>Prize Pool</p>₹{tab?.contest?.price}
+                          <p>Prize Pool</p>₹{tab?.contestData?.price}
                         </div>
                         <div>
                           <p>spots</p>
-                          <p>{Math.floor(tab?.contest?.totalSpots)}</p>
+                          <p>{Math.floor(tab?.contestData?.totalSpots)}</p>
                         </div>
                         <div>
                           <p>Entry</p>
                           <p>
                             ₹
                             {Math.floor(
-                              tab?.contest?.price / tab?.contest?.totalSpots
+                              tab?.contestData?.price /
+                                tab?.contestData?.totalSpots
                             )}
                           </p>
                         </div>
@@ -514,12 +519,12 @@ export default function MatchTabs({ tabs, g, livescore }) {
                     <LastJ>
                       <div>
                         <p style={{ display: "flex", alignItems: "center" }}>
-                          <F>1st</F> {tab?.contest?.prizeDetails[0]?.prize}
+                          <F>1st</F> {tab?.contestData?.prizeDetails[0]?.prize}
                         </p>
                       </div>
                       <First>
                         <EmojiEventsOutlinedIcon />{" "}
-                        {Math.floor((5 / tab.contest.totalSpots) * 100)}%
+                        {Math.floor((5 / tab.contestData.totalSpots) * 100)}%
                       </First>
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <M>m</M>
@@ -557,7 +562,8 @@ export default function MatchTabs({ tabs, g, livescore }) {
                             style={{ display: "flex", alignItems: "center" }}
                           >
                             #{t?.rank}
-                            {t?.rank < tab?.contest?.prizeDetails?.length ? (
+                            {t?.rank <
+                            tab?.contestData?.prizeDetails?.length ? (
                               <ArrowUpwardIcon
                                 style={{
                                   color: "var(--green)",

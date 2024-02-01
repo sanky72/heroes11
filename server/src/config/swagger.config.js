@@ -12,8 +12,8 @@ export default {
       },
       contact: {
         name: "Bahrican Yesil",
-        url: "https://github.com/bahricanyesil",
-        email: "bahricanyesil@gmail.com",
+        url: "https://github.com/12malkeet",
+        email: "12malkeet@gmail.com",
       },
     },
     basePath: "/api",

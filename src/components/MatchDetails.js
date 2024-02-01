@@ -138,6 +138,8 @@ const BottomT = styled.div`
   justify-content: space-between;
 `;
 export function MatchDetails({ players }) {
+  const { state } = useLocation();
+
   const { match_details, matchlive } = useSelector((state) => state.match);
   const [contests, setContests] = useState([]);
   const dispatch = useDispatch();
@@ -334,6 +336,7 @@ export function MatchDetails({ players }) {
             id={id}
             g={match_details}
             livescore={livescore}
+            selectedTab={state?.selectedTab}
           />
         </Bottom>
       </>
