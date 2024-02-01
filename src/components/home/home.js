@@ -66,10 +66,10 @@ const DeatilTop = styled.div`
 `;
 
 const CricketBg = styled.div`
-  background-image: url("https://i1.wp.com/amicafest.com/wp-content/uploads/2018/02/Refer-and-earn_website-image_2.png?fit=1200%2C371&ssl=1");
+  background-image: url("https://referandearns.in/wp-content/uploads/2022/06/image9-1.png");
   box-sizing: border-box;
   padding: 10px 10px;
-  height: 150px;
+  height: 210px;
   margin-bottom: 60px;
   position: relative;
   background-size: cover;
@@ -162,15 +162,6 @@ export function Home() {
       <Navbar home />
       <div className="homecontainer">
         <CricketBg id="section1" >
-          <TopDiv>
-            <ViewAll
-              style={{ display: "flex", alignItems: "center" }}
-              onClick={() => navigate(`/completed/${user?._id}`)}
-            >
-              View All
-              <ArrowForwardIosIcon style={{ fontSize: "12px" }} />
-            </ViewAll>
-          </TopDiv>
           {pastLoading ? (
             <div className="loadContainer">
               {" "}
