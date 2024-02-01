@@ -9,7 +9,7 @@ export default async (req, res) => {
 
   try {
     const contests = await ContestTeamMapping.find({
-      user_id: userId,
+      "teams.user_id": userId,
       match_id: matchId,
     });
     const contestsWithMatchData = await Promise.all(

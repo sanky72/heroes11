@@ -8,7 +8,7 @@ export default async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    const contests = await ContestTeamMapping.find({ user_id: userId });
+    const contests = await ContestTeamMapping.find({ "teams.user_id": userId });
     const contestsWithMatchData = await Promise.all(
       contests.map(async (contest) => {
         const matchId = contest.match_id;
