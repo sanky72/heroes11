@@ -6,7 +6,7 @@ import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalance
 import Brightness1Icon from "@mui/icons-material/Brightness1";
 import NotificationAddOutlinedIcon from "@mui/icons-material/NotificationAddOutlined";
 import WestIcon from "@mui/icons-material/West";
-import { Grid } from "@mui/material";
+import { Button, Drawer, Grid } from "@mui/material";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +17,6 @@ import db from "../firebase";
 import { showName } from "../utils/name";
 import MatchTabs from "./MatchTabs";
 import ShowOver from "./showover";
-
 const TopContainer = styled.div`
   background-color: var(--black);
   color: #ffffff;
@@ -137,9 +136,41 @@ const BottomT = styled.div`
   margin-top: 3px;
   justify-content: space-between;
 `;
+const WithdrawContainer = styled(Grid)``;
+
+const Detail = styled.div`
+  border-top: 1px solid #dddddd;
+  margin-top: 10px;
+  text-align: left;
+  padding: 10px 5px;
+  p {
+    color: rgba(0, 0, 0, 0.6);
+    text-transform: uppercase;
+  }
+`;
+const DetailTop = styled.div`
+  margin-top: 10px;
+  text-align: center;
+  padding: 10px 0;
+  p {
+    color: rgba(0, 0, 0, 0.6);
+    text-transform: uppercase;
+  }
+`;
+const AddButton = styled(Button)`
+  background-color: var(--green);
+  color: #ffffff;
+  width: 160px;
+  margin: 0 auto;
+  &:hover {
+    background-color: var(--green);
+    color: #ffffff;
+  }
+`;
 export function MatchDetails({ players }) {
   const { state } = useLocation();
   console.log("state match", state?.u);
+  const user = state?.u
   const { match_details, matchlive } = useSelector((state) => state.match);
   const [contests, setContests] = useState([]);
   const dispatch = useDispatch();
@@ -149,6 +180,10 @@ export function MatchDetails({ players }) {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const [open, setOpen] = useState(false);
+  const handleClick = () => {
+    setOpen(true);
+  };
   const showAnimation = () => {
     setDimensions({
       width: window.innerWidth,
@@ -220,10 +255,69 @@ export function MatchDetails({ players }) {
               )}
             </LeftSide>
             <RightSide>
-              <Brightness1Icon />
-              <AccountBalanceWalletOutlinedIcon />
-              <NotificationAddOutlinedIcon />
+              <AccountBalanceWalletOutlinedIcon
+            onClick={() => handleClick()}
+            style={{
+              cursor: "pointer",
+              fontSize: "20px",
+              stroke: "white",
+              position: "absolute",
+              marginLeft: "100px",
+              strokeWidth: "1.5",
+            }}
+          />
             </RightSide>
+            <Drawer
+        className="account-drawer"
+        anchor="top"
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <DetailTop>
+          <p>Total balance</p>
+          <h5>₹{user && user.wallet}</h5>
+        </DetailTop>
+        <AddButton
+          onClick={() =>
+            navigate("/payment", {
+              state: {
+                tab: "deposit",
+              },
+            })
+          }
+        >
+          add cash
+        </AddButton>
+        <Detail>
+          <p>Amount added</p>
+          <h5>₹ {user?.totalAmountAdded}</h5>
+        </Detail>
+        <Detail>
+          <WithdrawContainer container>
+            <Grid item sm={7} xs={7}>
+              <p>winnings</p>
+              <h5>₹ {user?.totalAmountWon}</h5>
+            </Grid>
+            <Grid item sm={5} xx={5}>
+              <Button
+                onClick={() =>
+                  navigate("/transaction", {
+                    state: {
+                      tab: "withdrawal",
+                    },
+                  })
+                }
+              >
+                Withdraw
+              </Button>
+            </Grid>
+          </WithdrawContainer>
+        </Detail>
+        <Detail>
+          <p>cash bonus</p>
+          <h5>₹ 0</h5>
+        </Detail>
+      </Drawer>
           </Top>
           {matchlive?.runFI && livescore?.matchScoreDetails && (
             <>
