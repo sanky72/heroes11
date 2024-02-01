@@ -17,6 +17,7 @@ import {
   sendVerificationCode,
   updateTeam,
   verifyEmail,
+  processReferral,
 } from "../controllers/user/index.js";
 import { auth, imageUpload } from "../middlewares/index.js";
 
@@ -43,5 +44,6 @@ router.post("/updateTeam", auth, updateTeam);
 router.get("/teams", auth, getTeams);
 router.get("/team", auth, getTeam);
 router.delete("/", auth, deleteUser);
+router.post("/processReferral", processReferral);
 
 export default router;

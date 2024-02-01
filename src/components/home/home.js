@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { SportsCricketOutlined } from "@mui/icons-material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import NotificationAddOutlinedIcon from "@mui/icons-material/NotificationAddOutlined";
-import { Button } from "@mui/material";
+import { Button, Modal, Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { GrMultimedia } from "react-icons/gr";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +15,19 @@ import Bottomnav from "../navbar/bottomnavbar";
 import "./home.css";
 import Match from "./match";
 import { loadUser } from "../../actions/userAction";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 200,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  wordWrap: "break-word",
+};
 
 const RightSide = styled.div`
   width: 90px;
@@ -122,6 +135,8 @@ export function Home() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const [showReferralModal, setShowReferralModal] = useState(false);
+  const [referralLink, setReferralLink] = useState("");
 
   useEffect(() => {
     async function getupcoming() {
@@ -151,6 +166,9 @@ export function Home() {
     getupcoming();
   }, [user]);
   useEffect(() => {
+    const param = new URLSearchParams(location.search).get("referral_id");
+    localStorage.setItem("referral_id", param);
+
     const servertoken =
       localStorage.getItem("token") && localStorage.getItem("token");
     if (!servertoken) {
@@ -165,11 +183,46 @@ export function Home() {
     dispatch(loadUser());
   }, [dispatch]);
 
+  const initiateReferral = async () => {
+    const url = window.location.href + `?referral_id=${user._id}`;
+    setReferralLink(url);
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "Referral Link",
+          text: "Refer to earn Rs. 25 and the person you refer get Rs. 50",
+          url: "url",
+        })
+        .then(() => console.log("Successful share"))
+        .catch((error) => console.log("Error sharing", error));
+    } else {
+      setShowReferralModal(true);
+    }
+  };
+
   return (
     <>
       <Navbar home />
       <div className="homecontainer">
-        <CricketBg id="section1">
+        <Modal
+          open={showReferralModal}
+          onClose={() => setShowReferralModal(false)}
+          aria-labelledby="modal-referral"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Referral Link
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Refer to earn Rs. 25 and the person you refer get Rs. 50
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Referral link - {<a href={referralLink}>{referralLink}</a>}
+            </Typography>
+          </Box>
+        </Modal>
+
+        <CricketBg id="section1" onClick={initiateReferral}>
           {pastLoading ? (
             <div className="loadContainer">
               {" "}

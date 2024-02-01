@@ -20,3 +20,4 @@ export { default as getTeams } from "./get-teams.js";
 export { default as getUser } from "./get-user.js";
 export { default as saveTeam } from "./save-team.js";
 export { default as updateTeam } from "./update-team.js";
+export { default as processReferral } from "./process-referral.js";

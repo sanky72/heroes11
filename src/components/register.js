@@ -111,14 +111,24 @@ export function Register() {
     console.log(JSON.stringify(formData, null, 2));
     //e.preventDefault();
     setEmail(formData.email);
+    let referralID = localStorage.getItem("referral_id") || "";
+    if (referralID === "null") {
+      referralID = "";
+    }
     const data = await axios.post(`${URL}/user`, {
       ...formData,
       authDetails: { authenticationType, jwt },
+      referralID,
     });
     console.log(data);
     if (data.data.code === "00035") {
       window.store.dispatch(showToast(data.data.resultMessage.en));
       dispatch({ type: LOGIN_SUCCESS, payload: data.data.user });
+      // const referralID = localStorage.getItem("referral_id");
+      // const data = await axios.post(`${URL}/processReferral`, {
+      //   referralID,
+      // });
+      localStorage.setItem("token", data.data.confirmToken);
     } else {
       window.store.dispatch(showToast(data.data.resultMessage.en, "error"));
       setErr(data.data.resultMessage.en);

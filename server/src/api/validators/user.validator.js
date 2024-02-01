@@ -6,6 +6,7 @@ export function validateRegister(body) {
     name: Joi.string().min(3).max(24).required(),
     phoneNumber: Joi.string().min(10).max(10).required(),
     authDetails: Joi.object(),
+    referralID: Joi.string().allow(""),
     // countryCode: Joi.string().min(1).max(4).required(),
     // language: Joi.string().valid('tr', 'en').required(),
     // deviceId: Joi.string().min(4).required()
@@ -21,6 +22,7 @@ export function validateRegister(body) {
       phoneNumber: Joi.string().min(10).max(10).required(),
       password: Joi.string().min(6).max(20).required(),
       authDetails: Joi.object(),
+      referralID: Joi.string().allow(""),
       // countryCode: Joi.string().min(1).max(4).required(),
       // language: Joi.string().valid('tr', 'en').required(),
       // deviceId: Joi.string().min(4).required()
