@@ -71,7 +71,6 @@ export default function Logingoogle() {
         color: "white",
       }}
     >
-      <p style={{ textAlign: "center" }}>Google Oauth Sign In</p>
       <GoogleOAuthProvider clientId="524341840994-eg71u6e8soei0j5cid8r8iojrmh13qf6.apps.googleusercontent.com">
         <GoogleLogin
           onSuccess={(credentialResponse) => {

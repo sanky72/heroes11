@@ -60,27 +60,6 @@ export function Login() {
           >
             <Button
               variant="contained"
-              style={{
-                backgroundColor: "#FFFFFF",
-                color: "black",
-                width: "50%",
-                marginRight: "1vw",
-                height: "30px",
-              }}
-              onClick={() =>
-                window.store.dispatch(
-                  showToast(
-                    "Not working yet,only google login is working",
-                    "error"
-                  )
-                )
-              }
-            >
-              <img src="./github.svg" alt="" />
-              Github
-            </Button>
-            <Button
-              variant="contained"
               elevation="2"
               style={{
                 backgroundColor: "#FFFFFF",
