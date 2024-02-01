@@ -242,6 +242,7 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const [value, setValue] = React.useState(0);
   const navigate = useNavigate();
+  console.log("leaderboard in Tabs Opened is",leaderboard);
   // const [stateContest, setStateContest] = React.useState(contest);
   // React.useEffect(()=> {
   // setStateContest(contest);
@@ -299,18 +300,18 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
 
             {leaderboard?.length > 0 &&
               leaderboard
-                .sort((a, b) => b._doc.points - a._doc.points)
+                .sort((a, b) => b.points - a.points)
                 .map((f, index) => (
                   <tr
-                    className={f._doc.userId === user._id ? "selected" : ""}
-                    onClick={() => navigate(`/savedteam/${f._doc._id}`)}
+                    className={f?.userId === user?._id ? "selected" : ""}
+                    onClick={() => navigate(`/savedteam/${f?._id}`)}
                     style={{ cursor: "pointer" }}
                   >
                     <td style={{ width: "200px !important" }} id="morewidth">
                       <Profile>
                         <img src={`${FURL}/profilepic.png`} alt="" />
                         <Name>
-                          {f.user.username}
+                          {f?.username}
                           <Won>
                             {match_details?.result == "Complete" && (
                               <p
@@ -319,7 +320,7 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
                                   alignItems: "center",
                                 }}
                               >
-                                {f._doc.userId == user._id ? (
+                                {f?.userId == user._id ? (
                                   <>
                                     <span
                                       style={{
@@ -328,7 +329,7 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
                                         marginRight: "6px",
                                       }}
                                     >
-                                      {index < contest?.prizeDetails.length &&
+                                      {index < contest?.prizeDetails?.length &&
                                         match_details?.result == "Complete" && (
                                           <>
                                             <EmojiEventsOutlinedIcon
@@ -345,9 +346,9 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
                                         )}
                                     </span>{" "}
                                     <span>
-                                      {index < contest?.prizeDetails.length &&
+                                      {index < contest?.prizeDetails?.length &&
                                         "₹" +
-                                          contest?.prizeDetails[index].prize}
+                                          contest?.prizeDetails[index]?.prize}
                                     </span>
                                   </>
                                 ) : (
@@ -362,8 +363,8 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
                                     />
                                     <span>won</span>
                                     <span>
-                                      {index < contest?.prizeDetails.length &&
-                                        contest?.prizeDetails[index].prize}
+                                      {index < contest?.prizeDetails?.length &&
+                                        contest?.prizeDetails[index]?.prize}
                                     </span>
                                   </>
                                 )}
@@ -373,7 +374,7 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
                         </Name>
                       </Profile>
                     </td>
-                    <td>{f._doc.points}</td>
+                    <td>{f?.points}</td>
                     <td>#{index + 1}</td>
                   </tr>
                 ))}

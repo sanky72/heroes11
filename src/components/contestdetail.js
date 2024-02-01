@@ -94,13 +94,16 @@ export function ContestDetail() {
   useEffect(() => {
     async function getteams() {
       if (id.length > 3) {
-        // const teamdata = await axios.get(`${URL}/getteamsofcontest/${id}`);
-        const contestdata = await API.get(`${URL}/match/contest/prizes/${id}`);
-        console.log("aekfbj", contestdata);
+        
+        const contestdata = await API.get(
+          `${URL}/contest/contest/prizes/${id}`
+        );
+        const teamdata = await API.get(`${URL}/match/leaderboard?contest_id=${id}&match_id=${contestdata?.data?.contest?.matchId}`);
+        console.log("aekfbj", teamdata);
         setContest(contestdata.data.contest);
         // setMatch(teamdata.data.match);
-        // const t = teamdata.data.teams.sort((a, b) => a.points - b.points);
-        // setLeaderboard([...t]);
+        const t = teamdata?.data?.contest?.teams.sort((a, b) => a.points - b.points);
+        setLeaderboard([...t]);
       }
     }
     getteams();

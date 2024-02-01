@@ -5,8 +5,8 @@ export default async (req, res) => {
   console.log("query is", req.query);
   try {
     console.log("params", req.params);
-    const { contestId } = req.params;
-    console.log("params", contestId);
+    const { contestId, matchId } = req.params;
+    console.log("params", req.params);
     const contestData = await ContestTeamMapping.findOne({
       match_id,
       contest_id,
