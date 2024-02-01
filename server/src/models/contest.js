@@ -9,6 +9,10 @@ const prizeDetailSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  rank: {
+    type: String,
+    required: true,
+  },
 });
 
 const contestSchema = new mongoose.Schema({
