@@ -45,7 +45,7 @@ export function Login() {
     <>
       <div className="logintopbar">
         <EmojiEventsOutlinedIcon style={{ marginRight: "1vw" }} />
-        Dream 11
+        Heroes 11
       </div>
 
       <div className="register">

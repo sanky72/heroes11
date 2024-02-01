@@ -12,6 +12,8 @@ const { compare } = bcrypt;
 
 export default async (req, res) => {
   const { error } = validateLogin(req.body);
+  const { authDetails: { authenticationType = "", jwt = "" } = {} } = req.body;
+  const isOauth = authenticationType === "oauth";
   if (error) {
     let code = "00025";
     if (error.details[0].message.includes("email")) code = "00039";
@@ -29,17 +31,26 @@ export default async (req, res) => {
   })
     .select("+password")
     .catch((err) => {
-      return res.status(500).json(errorHelper("00041", req, err.message));
+      return res.status(500).json({
+        errorMessage: errorHelper("00041", req, err.message),
+        authenticationType,
+      });
     });
 
-  if (!user) return res.status(404).json(errorHelper("00042", req));
+  if (!user)
+    return res.status(404).json({
+      errorMessage: errorHelper("00042", req),
+      authenticationType,
+    });
 
   if (!user.isActivated) return res.status(400).json(errorHelper("00043", req));
 
   if (!user.isVerified) return res.status(400).json(errorHelper("00044", req));
 
-  const match = await compare(req.body.password, user.password);
-  if (!match) return res.status(400).json(errorHelper("00045", req));
+  if (!isOauth) {
+    const match = await compare(req.body.password, user.password);
+    if (!match) return res.status(400).json(errorHelper("00045", req));
+  }
 
   const accessToken = signAccessToken(user._id);
   const refreshToken = signRefreshToken(user._id);

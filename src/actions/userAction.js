@@ -88,7 +88,7 @@ export const login = (myform) => async (dispatch) => {
     dispatch({ type: LOGIN_SUCCESS, payload: data.user });
   } catch (error) {
     console.log(error.response, "msd");
-    dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
+    dispatch({ type: LOGIN_FAIL, payload: error.response.data });
   }
 };
 

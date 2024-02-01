@@ -28,13 +28,19 @@ export default async (req, res) => {
       .json(errorHelper(code, req, error.details[0].message));
   }
 
+  const authenticationType = req.body?.authDetails?.authenticationType;
+  const isOauth = authenticationType === "oauth";
+
   const exists = await User.exists({ email: req.body.email }).catch((err) => {
     return res.status(500).json(errorHelper("00031", req, err.message));
   });
 
   if (exists) return res.status(409).json(errorHelper("00032", req));
 
-  const hashed = await hash(req.body.password, 10);
+  let hashed = "NA";
+  if (!isOauth) {
+    hashed = await hash(req.body.password, 10);
+  }
 
   const emailCode = generateRandomCode(4);
   await sendCodeToEmail(
@@ -74,10 +80,14 @@ export default async (req, res) => {
     phoneNumber: req.body.phoneNumber,
     countryCode: geo == null ? "US" : geo.country,
     lastLogin: Date.now(),
+    authenticationType: authenticationType || "normal",
   });
 
   user = await user.save().catch((err) => {
-    return res.status(500).json(errorHelper("00034", req, err.message));
+    console.log(err);
+    return res
+      .status(500)
+      .json({ test: "test", error: errorHelper("00034", req, err.message) });
   });
 
   user.password = null;

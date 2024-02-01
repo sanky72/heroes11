@@ -1,23 +1,51 @@
 import Joi from "joi";
 
 export function validateRegister(body) {
-  const schema = Joi.object({
+  let schema = Joi.object({
     email: Joi.string().email().min(3).required(),
-    password: Joi.string().min(6).max(20).required(),
     name: Joi.string().min(3).max(24).required(),
     phoneNumber: Joi.string().min(10).max(10).required(),
+    authDetails: Joi.object(),
     // countryCode: Joi.string().min(1).max(4).required(),
     // language: Joi.string().valid('tr', 'en').required(),
     // deviceId: Joi.string().min(4).required()
   });
+  //password: Joi.string().min(6).max(20).required()
+  const { authDetails: { authenticationType = "", jwt = "" } = {} } = body;
+  console.log("auth type", authenticationType);
+  if (!(authenticationType === "oauth")) {
+    console.log("here if password should be allowed");
+    schema = Joi.object({
+      email: Joi.string().email().min(3).required(),
+      name: Joi.string().min(3).max(24).required(),
+      phoneNumber: Joi.string().min(10).max(10).required(),
+      password: Joi.string().min(6).max(20).required(),
+      authDetails: Joi.object(),
+      // countryCode: Joi.string().min(1).max(4).required(),
+      // language: Joi.string().valid('tr', 'en').required(),
+      // deviceId: Joi.string().min(4).required()
+    });
+  }
+
   return schema.validate(body);
 }
 
 export function validateLogin(body) {
-  const schema = Joi.object({
+  let schema = Joi.object({
     email: Joi.string().email().min(3).required(),
-    password: Joi.string().min(6).max(20).required(),
+    authDetails: Joi.object(),
   });
+
+  const { authDetails: { authenticationType = "", jwt = "" } = {} } = body;
+
+  if (!(authenticationType === "oauth")) {
+    schema = Joi.object({
+      email: Joi.string().email().min(3).required(),
+      password: Joi.string().min(6).max(20).required(),
+      authDetails: Joi.object(),
+    });
+  }
+
   return schema.validate(body);
 }
 

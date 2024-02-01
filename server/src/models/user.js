@@ -13,7 +13,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false,
       select: false,
     },
     username: {
@@ -86,6 +86,10 @@ const userSchema = new Schema(
     //NOTE: In case the user delete its account, you can store its non-personalized information anonymously.
     deletedAt: {
       type: Date,
+    },
+    authenticationType: {
+      type: String,
+      required: true,
     },
   },
   {

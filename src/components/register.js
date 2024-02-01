@@ -12,33 +12,30 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "react-phone-number-input/style.css";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import * as Yup from "yup";
 import { showToast } from "../actions/toastAction";
 import { LOGIN_SUCCESS, URL } from "../constants/userConstants";
 import Otp from "./otp";
+import { jwtDecode } from "jwt-decode";
 
-export function Register() {
-  const { user, isAuthenticated, loading, error } = useSelector(
-    (state) => state.user
-  );
-  const dispatch = useDispatch();
+const isOauth = (authenticationType) => authenticationType === "oauth";
 
-  const [err, setErr] = useState();
-  const [email, setEmail] = useState("");
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [otp, setOtp] = useState();
-  const validationSchema = Yup.object().shape({
+const extractFromJwt = ({ jwt, authenticationType }) => {
+  if (authenticationType !== "oauth") {
+    return {};
+  }
+  const { name, email } = jwtDecode(jwt);
+  return { name, email };
+};
+
+const getValidationSchema = (authenticationType) => {
+  let validationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Name is required")
       .min(6, "Name must be at least 6 characters")
       .max(20, "Name must not exceed 20 characters"),
     email: Yup.string().required("Email is required").email("Email is invalid"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters")
-      .max(40, "Password must not exceed 40 characters"),
     phoneInput: Yup.string(),
     phoneNumber: Yup.string()
       .required("Phone Number is required")
@@ -47,13 +44,57 @@ export function Register() {
       .max(10, "Phone Number must not exceed 10 characters"),
     acceptTerms: Yup.bool().oneOf([true], "Accept Terms is required"),
   });
+
+  if (!isOauth(authenticationType)) {
+    validationSchema = Yup.object().shape({
+      name: Yup.string()
+        .default("john")
+        .required("Name is required")
+        .min(6, "Name must be at least 6 characters")
+        .max(20, "Name must not exceed 20 characters"),
+      email: Yup.string()
+        .default("test")
+        .required("Email is required")
+        .email("Email is invalid"),
+      phoneInput: Yup.string(),
+      phoneNumber: Yup.string()
+        .required("Phone Number is required")
+        .matches(/^[0-9+-]+$/, "It must be in numbers")
+        .min(10, "Phone Number must be at least 10 characters")
+        .max(10, "Phone Number must not exceed 10 characters"),
+      acceptTerms: Yup.bool().oneOf([true], "Accept Terms is required"),
+      password: Yup.string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters")
+        .max(40, "Password must not exceed 40 characters"),
+    });
+  }
+
+  return validationSchema;
+};
+
+export function Register() {
+  const { user, isAuthenticated, loading, error } = useSelector(
+    (state) => state.user
+  );
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { jwt, authenticationType } = location.state || {};
+
+  const [err, setErr] = useState();
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [otp, setOtp] = useState();
+
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(getValidationSchema(authenticationType)),
+    defaultValues: extractFromJwt({ jwt, authenticationType }),
   });
 
   useEffect(() => {
@@ -72,6 +113,7 @@ export function Register() {
     setEmail(formData.email);
     const data = await axios.post(`${URL}/user`, {
       ...formData,
+      authDetails: { authenticationType, jwt },
     });
     console.log(data);
     if (data.data.code === "00035") {
@@ -119,6 +161,7 @@ export function Register() {
               variant="standard"
               fullWidth
               margin="dense"
+              disabled={isOauth(authenticationType)}
               {...register("email")}
               error={errors.email ? true : false}
             />
@@ -134,6 +177,7 @@ export function Register() {
               fullWidth
               margin="dense"
               {...register("name")}
+              disabled={isOauth(authenticationType)}
               error={errors.name ? true : false}
             />
             <Typography variant="inherit" color="textSecondary">
@@ -147,26 +191,31 @@ export function Register() {
               variant="standard"
               fullWidth
               margin="dense"
+              autoFocus={isOauth(authenticationType)}
               {...register("phoneNumber")}
               error={errors.phoneNumber ? true : false}
             />
             <Typography variant="inherit" color="textSecondary">
               {errors.phoneNumber?.message}
             </Typography>
-            <TextField
-              required
-              id="password"
-              name="password"
-              label="Password"
-              variant="standard"
-              fullWidth
-              margin="dense"
-              {...register("password")}
-              error={errors.password ? true : false}
-            />
-            <Typography variant="inherit" color="textSecondary">
-              {errors.password?.message}
-            </Typography>
+            {!isOauth(authenticationType) && (
+              <>
+                <TextField
+                  required
+                  id="password"
+                  name="password"
+                  label="Password"
+                  variant="standard"
+                  fullWidth
+                  margin="dense"
+                  {...register("password")}
+                  error={errors.password ? true : false}
+                />
+                <Typography variant="inherit" color="textSecondary">
+                  {errors.password?.message}
+                </Typography>
+              </>
+            )}
             <Button
               variant="contained"
               type="submit"
