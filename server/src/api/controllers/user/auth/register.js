@@ -1,4 +1,4 @@
-import { User } from "../../../../models/index.js";
+import { User, Token } from "../../../../models/index.js";
 import { validateRegister } from "../../../validators/user.validator.js";
 import {
   errorHelper,
@@ -8,6 +8,8 @@ import {
   getText,
   turkishToEnglish,
   signConfirmCodeToken,
+  signAccessToken,
+  signRefreshToken,
 } from "../../../../utils/index.js";
 import ipHelper from "../../../../utils/helpers/ip-helper.js";
 import bcrypt from "bcryptjs";
@@ -17,6 +19,7 @@ const { lookup } = geoip;
 
 export default async (req, res) => {
   const { error } = validateRegister(req.body);
+  console.log("error", error);
   if (error) {
     let code = "00025";
     if (error.details[0].message.includes("email")) code = "00026";
@@ -30,6 +33,27 @@ export default async (req, res) => {
 
   const authenticationType = req.body?.authDetails?.authenticationType;
   const isOauth = authenticationType === "oauth";
+  const referralID = req.body?.referralID;
+  let doesReferredUserExist = false;
+  let referredUserWalletAmount = 0;
+
+  if (referralID) {
+    const referredUser = await User.findById(referralID).catch((err) => {
+      return res
+        .status(500)
+        .json({ error: "crashed during referredUser check" });
+    });
+
+    // console.log("ref status", referredUser.statusCode);
+    // console.log("referredUser ", referredUser, referredUser._id);
+
+    // if (referredUser.statusCode !== 200) doesReferredUserExist = false;
+    if (referredUser._id) {
+      doesReferredUserExist = true;
+      referredUserWalletAmount = referredUser.wallet;
+    }
+  }
+
 
   const exists = await User.exists({ email: req.body.email }).catch((err) => {
     return res.status(500).json(errorHelper("00031", req, err.message));
@@ -50,7 +74,7 @@ export default async (req, res) => {
     req.body.language,
     "register",
     req,
-    res,
+    res
   );
 
   let username = "";
@@ -81,7 +105,7 @@ export default async (req, res) => {
     countryCode: geo == null ? "US" : geo.country,
     lastLogin: Date.now(),
     authenticationType: authenticationType || "normal",
-    wallet: 50,
+    wallet: doesReferredUserExist ? 100 : 50,
   });
 
   user = await user.save().catch((err) => {
@@ -91,9 +115,41 @@ export default async (req, res) => {
       .json({ test: "test", error: errorHelper("00034", req, err.message) });
   });
 
+  // update wallet of referring user
+
+  if (doesReferredUserExist) {
+    await User.updateOne(
+      { _id: referralID },
+      {
+        $set: {
+          wallet: referredUserWalletAmount + 25,
+        },
+      }
+    ).catch((err) => {
+      return res.status(500).json(errorHelper("00090", req, err.message));
+    });
+  }
+
   user.password = null;
 
   const confirmCodeToken = signConfirmCodeToken(user._id, emailCode);
+  const accessToken = signAccessToken(user._id);
+  const refreshToken = signRefreshToken(user._id);
+
+  await Token.updateOne(
+    { userId: user._id },
+    {
+      $set: {
+        refreshToken: refreshToken,
+        status: true,
+        expiresIn: Date.now() + 604800000,
+        createdAt: Date.now(),
+      },
+    },
+    { upsert: true }
+  ).catch((err) => {
+    return res.status(500).json(errorHelper("00046", req, err.message));
+  });
 
   logger("00035", user._id, getText("en", "00035"), "Info", req);
   return res.status(200).json({
@@ -101,6 +157,8 @@ export default async (req, res) => {
     code: "00035",
     user,
     confirmToken: confirmCodeToken,
+    accessToken,
+    refreshToken,
   });
 };
 
