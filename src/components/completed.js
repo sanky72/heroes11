@@ -40,25 +40,6 @@ const Container = styled.div`
   }
 `;
 
-const DeatilTop = styled.div`
-  margin-top: 10px;
-  text-align: center;
-  padding: 10px 0;
-  p {
-    color: rgba(0, 0, 0, 0.6);
-    text-transform: uppercase;
-  }
-`;
-
-const CricketBg = styled.div`
-  background-image: url("./cricketbg.jpg");
-  box-sizing: border-box;
-  padding: 10px 10px;
-  height: 150px;
-  margin-bottom: 60px;
-  position: relative;
-`;
-
 const Top = styled.div`
   display: flex;
   justify-content: space-between;
@@ -75,14 +56,6 @@ const Dot = styled.div`
   height: 7px;
   border-radius: 50%;
   margin-right: 5px;
-`;
-
-const TopDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-const ViewAll = styled(Button)`
-  color: #ffffff;
 `;
 
 function TabPanel(props) {
@@ -124,6 +97,7 @@ export function Completed() {
   const { user, isAuthenticated, error } = useSelector((state) => state.user);
   const [upcoming, setUpcoming] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [matches, setMatches] = useState([]);
   const [date, setDate] = useState();
   const [live, setLive] = useState([]);
   const [past, setPast] = useState([]);
@@ -153,7 +127,41 @@ export function Completed() {
         // );
         // setPast(cm);
         // setUpcoming(um);
-        setUpcoming([data.data.contests]);
+        const matchesObject = {};
+        setUpcoming(data.data.contests);
+        for (const contest of data.data.contests) {
+          const matchId = contest.match_id;
+          const {
+            team_a,
+            team_b,
+            tournament_name,
+            match_result,
+            match_start_time,
+          } = contest.matchData;
+
+          // Check if the match_id exists in matchesObject
+          if (!matchesObject[matchId]) {
+            // If it doesn't exist, create a new match object with an array property for contests
+            matchesObject[matchId] = {
+              match_id: matchId,
+              tournament_name,
+              team_a,
+              match_result,
+              team_b,
+              match_start_time,
+              contests: [],
+            };
+          }
+
+          // Add the current contest to the array inside the match object
+          matchesObject[matchId].contests.push(contest);
+        }
+
+        // Convert the matchesObject values into an array
+        const matchesArray = Object.values(matchesObject);
+        console.log({ matchesArray });
+        console.log({ matchesObject });
+        setMatches(matchesArray);
         // setLive(data.data.contests);
         setLoading(false);
       }
@@ -173,6 +181,7 @@ export function Completed() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  console.log(upcoming);
   return (
     <>
       <Navbar />
@@ -196,178 +205,178 @@ export function Completed() {
               </Box>
               <TabPanel value={value} index={0}>
                 <div className="matches">
-                  {upcoming?.length > 0 ? (
+                  {matches?.length > 0 ? (
                     <>
-                      {upcoming.map((u) => (
-                        <div
-                          className="matchcontainer"
-                          onClick={() => navigate(`/contests/${u.id}`)}
-                          style={{
-                            postion: "absolute !important",
-                            backgroundColor: "#000",
-                          }}
-                        >
-                          <Top>
-                            <h5
-                              style={{
-                                color: "#595959",
-                                height: "3vh",
-                                fontSize: "12px",
-                                fontWeight: "800",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              {u.match_title}
-                            </h5>
-                            <NotificationAddOutlinedIcon
-                              style={{ fontSize: "18px" }}
-                            />
-                          </Top>
-                          <div className="match">
-                            <div className="matchcenter">
-                              <div className="matchlefts">
-                                <img
-                                  src={u.teamAwayFlagUrl}
-                                  alt=""
-                                  width="40"
-                                />
-                                {/* <h5>{u.away.code}</h5> */}
-                              </div>
-                              <div
-                                className={
-                                  u.result == "Yes" ? "completed" : "time"
-                                }
+                      {matches.map((u) => {
+                        console.log(u);
+                        return (
+                          <div
+                            className="matchcontainer"
+                            onClick={() => navigate(`/contests/${u.id}`)}
+                            style={{
+                              postion: "absolute !important",
+                              backgroundColor: "#000",
+                            }}
+                          >
+                            <Top>
+                              <h5
+                                style={{
+                                  color: "#595959",
+                                  height: "3vh",
+                                  fontSize: "12px",
+                                  fontWeight: "800",
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
                               >
-                                {u.result != "Yes" && (
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      flexDirection: "column",
-                                    }}
-                                  >
-                                    <p
+                                {u.tournament_name}
+                              </h5>
+                              <NotificationAddOutlinedIcon
+                                style={{ fontSize: "18px" }}
+                              />
+                            </Top>
+                            <div className="match">
+                              <div className="matchcenter">
+                                <div className="matchlefts">
+                                  {/* { <img
+              src={u.teamAwayFlagUrl}
+              alt=""
+              width="40"
+            /> } */}
+                                  <h5>{u.team_a}</h5>
+                                </div>
+                                <div
+                                  className={
+                                    u.match_result ? "completed" : "time"
+                                  }
+                                >
+                                  {u.match_result && (
+                                    <div
                                       style={{
-                                        color: "#5e5b5b",
-                                        textTransform: "auto",
-                                        fontSize: "10px",
-                                        marginTop: "2px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flexDirection: "column",
                                       }}
                                     >
-                                      {!(u.result == "Yes") ? (
-                                        sameDayorNot(
-                                          new Date(),
-                                          new Date(u.date)
-                                        ) ||
-                                        isTommorrow(
-                                          new Date(),
-                                          new Date(u.date)
-                                        ) ? (
-                                          <div>
-                                            <p>
-                                              {hoursRemaining(
-                                                u.date,
-                                                "k",
-                                                date
-                                              )}
-                                            </p>
+                                      <p
+                                        style={{
+                                          color: "#5e5b5b",
+                                          textTransform: "auto",
+                                          fontSize: "10px",
+                                          marginTop: "2px",
+                                        }}
+                                      >
+                                        {!u.match_result ? (
+                                          sameDayorNot(
+                                            new Date(),
+                                            new Date(u.matchData.startTime)
+                                          ) ||
+                                          isTommorrow(
+                                            new Date(),
+                                            new Date(u.matchData.startTime)
+                                          ) ? (
+                                            <div>
+                                              <p>
+                                                {hoursRemaining(
+                                                  u.matchData.startTime,
+                                                  "k",
+                                                  date
+                                                )}
+                                              </p>
+                                              <p
+                                                style={{
+                                                  color: "#5e5b5b",
+                                                  textTransform: "auto",
+                                                  fontSize: "10px",
+                                                  marginTop: "2px",
+                                                }}
+                                              >
+                                                {getDisplayDate(
+                                                  u.matchData.startTime,
+                                                  "i",
+                                                  date
+                                                ) &&
+                                                  getDisplayDate(
+                                                    u.matchData.startTime,
+                                                    "i",
+                                                    date
+                                                  )}
+                                              </p>
+                                            </div>
+                                          ) : (
                                             <p
                                               style={{
-                                                color: "#5e5b5b",
+                                                color: "#e10000",
                                                 textTransform: "auto",
-                                                fontSize: "10px",
-                                                marginTop: "2px",
                                               }}
                                             >
                                               {getDisplayDate(
-                                                u.date,
-                                                "i",
-                                                date
+                                                u.matchData.startTime,
+                                                "i"
                                               ) &&
                                                 getDisplayDate(
-                                                  u.date,
-                                                  "i",
-                                                  date
+                                                  u.matchData.startTime,
+                                                  "i"
                                                 )}
                                             </p>
-                                          </div>
+                                          )
                                         ) : (
-                                          <p
-                                            style={{
-                                              color: "#e10000",
-                                              textTransform: "auto",
-                                            }}
-                                          >
-                                            {getDisplayDate(u.date, "i") &&
-                                              getDisplayDate(u.date, "i")}
-                                          </p>
-                                        )
-                                      ) : (
-                                        "Completed"
-                                      )}
-                                    </p>
-                                  </div>
-                                )}
-                              </div>
-                              <div className="matchrights">
-                                {/* <h5> {u.home.code}</h5> */}
-                                <img
-                                  src={u.teamHomeFlagUrl}
-                                  alt=""
-                                  width="40"
-                                />
+                                          "Completed"
+                                        )}
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="matchrights">
+                                  <h5>{u.team_b}</h5>
+                                  {/* <img
+              src={u.teamHomeFlagUrl}
+              alt=""
+              width="40"
+            /> */}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div
-                            className="bottom"
-                            style={{
-                              position: "relative",
-                              padding: "6px 15px",
-                            }}
-                          >
                             <div
+                              className="bottom"
                               style={{
-                                display: "flex",
-                                width: "150px",
-                                justifyContent: "space-between",
-                                alignItems: "center",
+                                position: "relative",
+                                padding: "6px 15px",
                               }}
                             >
-                              {u.teams.length > 0 && (
-                                <h5
-                                  className=""
-                                  style={{
-                                    textTransform: "capitalize",
-                                    fontSize: "12px",
-                                  }}
-                                >
-                                  {u.teams.length} teams
-                                </h5>
-                              )}
-                              <div className="meg">
+                              <div
+                                style={{
+                                  display: "flex",
+                                  width: "150px",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                }}
+                              >
                                 {u.contests.length > 0 && (
                                   <h5
+                                    className=""
                                     style={{
                                       textTransform: "capitalize",
                                       fontSize: "12px",
                                     }}
                                   >
-                                    {u.contests.length} contests
+                                    {u.contests.length}
+                                    {u.contests.length == 1
+                                      ? " Contest"
+                                      : " Contests"}
                                   </h5>
                                 )}
                               </div>
-                            </div>
-                            <div className="icon">
-                              <SportsCricketOutlined
-                                style={{ color: "#595959", fontSize: "18px" }}
-                              />
+                              <div className="icon">
+                                <SportsCricketOutlined
+                                  style={{ color: "#595959", fontSize: "18px" }}
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </>
                   ) : null}
                 </div>
@@ -421,7 +430,7 @@ export function Completed() {
                               </div>
                               <div
                                 className={
-                                  u.result == "Yes" ? "completed" : "time"
+                                  u.match_result ? "completed" : "time"
                                 }
                               >
                                 {u.result === "Yes" && (
@@ -455,7 +464,11 @@ export function Completed() {
                                         marginTop: "2px",
                                       }}
                                     >
-                                      {getDisplayDate(u.date, "i", date)}
+                                      {getDisplayDate(
+                                        u.matchData.startTime,
+                                        "i",
+                                        date
+                                      )}
                                     </p>
                                   </div>
                                 )}
@@ -485,7 +498,7 @@ export function Completed() {
                                 alignItems: "center",
                               }}
                             >
-                              {u.teams.length > 0 && (
+                              {u.contests.length > 0 && (
                                 <h5
                                   className=""
                                   style={{
@@ -493,7 +506,7 @@ export function Completed() {
                                     fontSize: "12px",
                                   }}
                                 >
-                                  {u.teams.length} teams
+                                  {u.contests.length} contests
                                 </h5>
                               )}
                               <div className="meg">
@@ -504,7 +517,10 @@ export function Completed() {
                                       fontSize: "12px",
                                     }}
                                   >
-                                    {u.contests.length} contests
+                                    {u.contests.length}
+                                    {u.contests.length == 1
+                                      ? " Contest"
+                                      : " Contests"}
                                   </h5>
                                 )}
                               </div>
