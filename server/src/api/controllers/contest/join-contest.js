@@ -1,5 +1,7 @@
+import { ObjectId } from "mongodb";
 import { ContestTeamMapping } from "../../../models/contest-team-mapping.js";
 import { getText } from "../../../utils/index.js";
+import { Contest } from "../../../models/contest.js";
 
 export default async (req, res) => {
   const payload = req.body;
@@ -29,6 +31,9 @@ export default async (req, res) => {
         code: "00096",
       });
     }
+    const contestData = await Contest.findOne({
+      _id: new ObjectId(contest_id),
+    });
     const existingRecord = await ContestTeamMapping.findOne({
       // "teams.user_id": user_id,
       match_id,
@@ -43,6 +48,9 @@ export default async (req, res) => {
         team_id,
         contest_id,
         user_id,
+        totalSpots: contestData.totalSpots,
+        spotsLeft: contestData.totalSpots - 1,
+        price: contestData.price,
       });
 
       const savedContest = await contestInstance.save();
@@ -53,6 +61,9 @@ export default async (req, res) => {
         {
           $push: {
             teams: team,
+          },
+          $inc: {
+            spotsLeft: -1,
           },
         }
       );

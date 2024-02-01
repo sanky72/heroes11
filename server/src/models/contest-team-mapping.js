@@ -5,6 +5,14 @@ const ContestTeamMappingSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  totalSpots: {
+    type: Number,
+    required: true,
+  },
+  spotsLeft: {
+    type: Number,
+    required: true,
+  },
   teams: [
     {
       team_id: {

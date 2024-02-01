@@ -12,11 +12,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-import { contestsData } from "../data/contests";
 import db from "../firebase";
 import { showName } from "../utils/name";
 import MatchTabs from "./MatchTabs";
 import ShowOver from "./showover";
+import { API } from "../actions/userAction";
+import { URL } from "../constants/userConstants";
+
 const TopContainer = styled.div`
   background-color: var(--black);
   color: #ffffff;
@@ -36,9 +38,8 @@ const TopContainer = styled.div`
   max-width: 550px;
   z-index: 1000;
   box-sizing: border-box;
-  display : flex;
+  display: flex;
   align-items: center;
-
 `;
 
 const GreenMark = styled.span`
@@ -174,7 +175,7 @@ const AddButton = styled(Button)`
 export function MatchDetails({ players }) {
   const { state } = useLocation();
   console.log("state match", state?.u);
-  const user = state?.u
+  const user = state?.u;
   const { match_details, matchlive } = useSelector((state) => state.match);
   const [contests, setContests] = useState([]);
   const dispatch = useDispatch();
@@ -236,7 +237,8 @@ export function MatchDetails({ players }) {
     async function getupcoming() {
       if (id?.length > 3) {
         // dispatch(getmatch(id));
-        const data = contestsData; // await axios.get(`${URL}/getcontests/${id}`);
+        const res = await API.get(`${URL}/match/contestsPrizes`);
+        const data = res.data;
         setContests(data.contests);
       }
     }
@@ -260,68 +262,68 @@ export function MatchDetails({ players }) {
             </LeftSide>
             <RightSide>
               <AccountBalanceWalletOutlinedIcon
-            onClick={() => handleClick()}
-            style={{
-              cursor: "pointer",
-              fontSize: "20px",
-              stroke: "white",
-              position: "absolute",
-              marginLeft: "100px",
-              strokeWidth: "1.5",
-            }}
-          />
+                onClick={() => handleClick()}
+                style={{
+                  cursor: "pointer",
+                  fontSize: "20px",
+                  stroke: "white",
+                  position: "absolute",
+                  marginLeft: "100px",
+                  strokeWidth: "1.5",
+                }}
+              />
             </RightSide>
             <Drawer
-        className="account-drawer"
-        anchor="top"
-        open={open}
-        onClose={() => setOpen(false)}
-      >
-        <DetailTop>
-          <p>Total balance</p>
-          <h5>₹{user && user.wallet}</h5>
-        </DetailTop>
-        <AddButton
-          onClick={() =>
-            navigate("/payment", {
-              state: {
-                tab: "deposit",
-              },
-            })
-          }
-        >
-          add cash
-        </AddButton>
-        <Detail>
-          <p>Amount added</p>
-          <h5>₹ {user?.totalAmountAdded}</h5>
-        </Detail>
-        <Detail>
-          <WithdrawContainer container>
-            <Grid item sm={7} xs={7}>
-              <p>winnings</p>
-              <h5>₹ {user?.totalAmountWon}</h5>
-            </Grid>
-            <Grid item sm={5} xx={5}>
-              <Button
+              className="account-drawer"
+              anchor="top"
+              open={open}
+              onClose={() => setOpen(false)}
+            >
+              <DetailTop>
+                <p>Total balance</p>
+                <h5>₹{user && user.wallet}</h5>
+              </DetailTop>
+              <AddButton
                 onClick={() =>
-                  navigate("/transaction", {
+                  navigate("/payment", {
                     state: {
-                      tab: "withdrawal",
+                      tab: "deposit",
                     },
                   })
                 }
               >
-                Withdraw
-              </Button>
-            </Grid>
-          </WithdrawContainer>
-        </Detail>
-        <Detail>
-          <p>cash bonus</p>
-          <h5>₹ 0</h5>
-        </Detail>
-      </Drawer>
+                add cash
+              </AddButton>
+              <Detail>
+                <p>Amount added</p>
+                <h5>₹ {user?.totalAmountAdded}</h5>
+              </Detail>
+              <Detail>
+                <WithdrawContainer container>
+                  <Grid item sm={7} xs={7}>
+                    <p>winnings</p>
+                    <h5>₹ {user?.totalAmountWon}</h5>
+                  </Grid>
+                  <Grid item sm={5} xx={5}>
+                    <Button
+                      onClick={() =>
+                        navigate("/transaction", {
+                          state: {
+                            tab: "withdrawal",
+                          },
+                        })
+                      }
+                    >
+                      Withdraw
+                    </Button>
+                  </Grid>
+                </WithdrawContainer>
+              </Detail>
+              <Detail>
+                <p>cash bonus</p>
+                <h5>₹ 0</h5>
+              </Detail>
+            </Drawer>
           </Top>
           {matchlive?.runFI && livescore?.matchScoreDetails && (
             <>

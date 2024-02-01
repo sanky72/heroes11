@@ -97,7 +97,7 @@ export default function ConfirmModal({
         totalSpots: modal.totalSpots,
       });
       console.log("CONTEST JOINED", data.data.resultMessage.en);
-      window.store.dispatch(showToast(data.data.resultMessage.en, "error"));
+      window.store.dispatch(showToast(data.data.resultMessage.en));
       loadJoined();
       setSelectedTeam(null);
       setOpen(false);

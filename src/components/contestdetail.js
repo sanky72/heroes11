@@ -95,9 +95,7 @@ export function ContestDetail() {
     async function getteams() {
       if (id.length > 3) {
         // const teamdata = await axios.get(`${URL}/getteamsofcontest/${id}`);
-        const contestdata = await API.get(
-          `${URL}/contest/contest/prizes/${id}`
-        );
+        const contestdata = await API.get(`${URL}/match/contest/prizes/${id}`);
         console.log("aekfbj", contestdata);
         setContest(contestdata.data.contest);
         // setMatch(teamdata.data.match);
