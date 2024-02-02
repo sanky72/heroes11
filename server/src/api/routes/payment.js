@@ -31,13 +31,13 @@ router.post("/add", auth, async (req, res) => {
 
 router.post("/deduct", auth, async (req, res) => {
   const { amount } = req.body;
-  console.log(req.user._id);
+  // console.log(req.user._id);
 
   const user = await User.findOne({ _id: req.user._id }).catch((err) => {
     return res.status(500).json(errorHelper("00064", req, err.message));
   });
 
-  console.log(amount, "now user: ", user);
+  // console.log(amount, "now user: ", user);
 
   const userWallet = user?.wallet;
   const updatedAmount = userWallet - +amount;

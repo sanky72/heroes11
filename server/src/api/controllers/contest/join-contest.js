@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import { ContestTeamMapping } from "../../../models/contest-team-mapping.js";
 import { getText } from "../../../utils/index.js";
 import { Contest } from "../../../models/contest.js";
+import { User } from "../../../models/index.js";
 
 export default async (req, res) => {
   const payload = req.body;
@@ -11,6 +12,7 @@ export default async (req, res) => {
     team_id,
     matchId: match_id,
     team,
+    entryFee,
   } = payload;
 
   try {
@@ -26,6 +28,21 @@ export default async (req, res) => {
       contest_id,
     });
     if (existingRecordUser) {
+      const user = await User.findOne({ _id: user_id }).catch((err) => {
+        return res.status(500).json(errorHelper("00064", req, err.message));
+      });
+
+      await User.updateOne(
+        { _id: user_id },
+        {
+          $set: {
+            wallet: +entryFee + user?.wallet,
+          },
+        }
+      ).catch((err) => {
+        return res.status(500).json(errorHelper("00064", req, err.message));
+      });
+
       return res.status(200).json({
         resultMessage: { en: getText("en", "00096") },
         code: "00096",
