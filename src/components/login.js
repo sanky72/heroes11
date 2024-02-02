@@ -64,15 +64,20 @@ export function Login() {
               style={{
                 backgroundColor: "#FFFFFF",
                 color: "black",
-                width: "50%",
+                width: "100%",
                 height: "30px",
                 display: "flex",
+                alignItems: "center",
+                textTransform: "none",
+                display: "flex",
+                justifyContent: "space-between",
                 alignItems: "center",
               }}
               onClick={() => navigate("/googlelogin")}
             >
               <img src="./google.svg" alt="" style={{ marginRight: "5px" }} />
-              Google
+              Continue with Google
+              <span></span>
             </Button>
           </div>
           <form onSubmit={handlesubmit} className="loginform">
