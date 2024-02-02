@@ -20,6 +20,7 @@ import {
 import Loader from "./loader";
 import Navbar from "./navbar";
 import Bottomnav from "./navbar/bottomnavbar";
+import { completedMatchData } from "../data/completedMatchData";
 
 const Container = styled.div`
   .MuiTabs-indicator {
@@ -134,8 +135,11 @@ export function Completed() {
         // );
         // setPast(cm);
         // setUpcoming(um);
+
         const matchesObject = {};
         setUpcoming(data.data.contests);
+        const res = await API.get(`${URL}/match/completedMatches`);
+        setPast(res.data?.matches);
         for (const contest of data.data.contests) {
           const matchId = contest.match_id;
           const {
@@ -217,7 +221,7 @@ export function Completed() {
       </EmptyStateContainer>
     );
   };
-  console.log(upcoming);
+  console.log({ past });
   return (
     <>
       <Navbar />
@@ -404,169 +408,126 @@ export function Completed() {
                 <div className="matches">
                   {past?.length > 0 ? (
                     <>
-                      {past.map((u) => (
-                        <div
-                          className="matchcontainer"
-                          onClick={() =>
-                            navigate(`/contests/${u.match_id}`, {
-                              state: {
-                                u,
-                                selectedTab: 1,
-                              },
-                            })
-                          }
-                          style={{
-                            position: "absolute !important",
-                            backgroundColor: "#000",
-                          }}
-                        >
-                          <Top>
-                            <h5
-                              style={{
-                                color: "#595959",
-                                height: "3vh",
-                                fontSize: "12px",
-                                fontWeight: "800",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              <span style={{ marginRight: "5px" }}>
-                                {/* {u.away.code} */}
-                              </span>{" "}
-                              vs
-                              <span style={{ marginLeft: "5px" }}>
-                                {/* {u.home.code} */}
-                              </span>
-                            </h5>
-                            <NotificationAddOutlinedIcon
-                              style={{ fontSize: "18px" }}
-                            />
-                          </Top>
-                          <div className="match">
-                            <div className="matchcenter">
-                              <div className="matchlefts">
-                                <img
-                                  src={u.teamAwayFlagUrl}
-                                  alt=""
-                                  width="40"
-                                />
-                                {/* <h5>{u.away.code}</h5> */}
-                              </div>
-                              <div
-                                className={
-                                  u.match_result ? "completed" : "time"
-                                }
+                      {past.map((pastMatch) => {
+                        const u = pastMatch.data;
+                        return (
+                          <div
+                            className="matchcontainer"
+                            onClick={() =>
+                              navigate(
+                                `/contestdetail/${u.match_id}/${u.contestData._id}`
+                              )
+                            }
+                            style={{
+                              position: "absolute !important",
+                              backgroundColor: "#000",
+                            }}
+                          >
+                            <Top>
+                              <h5
+                                style={{
+                                  color: "#595959",
+                                  height: "3vh",
+                                  fontSize: "12px",
+                                  fontWeight: "800",
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
                               >
-                                {u.result === "Yes" && (
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      flexDirection: "column",
-                                    }}
-                                  >
+                                <span style={{ marginRight: "5px" }}>
+                                  {/* {u.away.code} */}
+                                </span>{" "}
+                                vs
+                                <span style={{ marginLeft: "5px" }}>
+                                  {/* {u.home.code} */}
+                                </span>
+                              </h5>
+                              <NotificationAddOutlinedIcon
+                                style={{ fontSize: "18px" }}
+                              />
+                            </Top>
+                            <div className="match">
+                              <div className="matchcenter">
+                                <div className="matchlefts">
+                                  <h5>{u.team_a.name}</h5>
+                                </div>
+                                <div
+                                  className={
+                                    u.match_result ? "completed" : "time"
+                                  }
+                                >
+                                  {u.status === "past" && (
                                     <div
                                       style={{
                                         display: "flex",
                                         alignItems: "center",
-                                        textTransform: "uppercase",
+                                        justifyContent: "center",
+                                        flexDirection: "column",
                                       }}
                                     >
-                                      <Dot />
-                                      <h5
-                                        style={{ fontWeight: "600 !important" }}
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          textTransform: "uppercase",
+                                        }}
                                       >
-                                        Completed
-                                      </h5>
+                                        <Dot />
+                                        <h5
+                                          style={{
+                                            fontWeight: "600 !important",
+                                          }}
+                                        >
+                                          Completed
+                                        </h5>
+                                      </div>
+                                      <p
+                                        style={{
+                                          color: "#5e5b5b",
+                                          textTransform: "auto",
+                                          fontSize: "10px",
+                                          marginTop: "2px",
+                                        }}
+                                      >
+                                        {getDisplayDate(
+                                          u.match_start_time,
+                                          "i",
+                                          date
+                                        )}
+                                      </p>
                                     </div>
-                                    <p
-                                      style={{
-                                        color: "#5e5b5b",
-                                        textTransform: "auto",
-                                        fontSize: "10px",
-                                        marginTop: "2px",
-                                      }}
-                                    >
-                                      {getDisplayDate(
-                                        u.match_start_time,
-                                        "i",
-                                        date
-                                      )}
-                                    </p>
-                                  </div>
-                                )}
+                                  )}
+                                </div>
+                                <div className="matchrights">
+                                  <h5> {u.team_b.name}</h5>
+                                </div>
                               </div>
-                              <div className="matchrights">
-                                {/* <h5> {u.home.code}</h5> */}
-                                <img
-                                  src={u.teamHomeFlagUrl}
-                                  alt=""
-                                  width="40"
+                            </div>
+                            <div
+                              className="bottom"
+                              style={{
+                                position: "relative",
+                                padding: "6px 15px",
+                              }}
+                            >
+                              <div className="icon">
+                                <h5
+                                  style={{
+                                    marginRight: "10px",
+                                    color: "var(--green)",
+                                  }}
+                                >
+                                  u won {u.won}
+                                  rs !
+                                </h5>
+                                <SportsCricketOutlined
+                                  style={{ color: "#595959", fontSize: "18px" }}
                                 />
                               </div>
                             </div>
                           </div>
-                          <div
-                            className="bottom"
-                            style={{
-                              position: "relative",
-                              padding: "6px 15px",
-                            }}
-                          >
-                            <div
-                              style={{
-                                display: "flex",
-                                width: "150px",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                              }}
-                            >
-                              {u.contests.length > 0 && (
-                                <h5
-                                  className=""
-                                  style={{
-                                    textTransform: "capitalize",
-                                    fontSize: "12px",
-                                  }}
-                                >
-                                  {u.contests.length} contests
-                                </h5>
-                              )}
-                              <div className="meg">
-                                {u.contests.length > 0 && (
-                                  <h5
-                                    style={{
-                                      textTransform: "capitalize",
-                                      fontSize: "12px",
-                                    }}
-                                  >
-                                    {u.contests.length}
-                                    {u.contests.length == 1
-                                      ? " Contest"
-                                      : " Contests"}
-                                  </h5>
-                                )}
-                              </div>
-                            </div>
-                            <div className="icon">
-                              <h5
-                                style={{
-                                  marginRight: "10px",
-                                  color: "var(--green)",
-                                }}
-                              >
-                                u won {u.won}
-                                rs !
-                              </h5>
-                              <SportsCricketOutlined
-                                style={{ color: "#595959", fontSize: "18px" }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </>
                   ) : (
                     renderEmptyState()

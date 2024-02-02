@@ -242,7 +242,7 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const [value, setValue] = React.useState(0);
   const navigate = useNavigate();
-  console.log("leaderboard in Tabs Opened is",leaderboard);
+  console.log("leaderboard in Tabs Opened is", leaderboard);
   // const [stateContest, setStateContest] = React.useState(contest);
   // React.useEffect(()=> {
   // setStateContest(contest);

@@ -13,6 +13,18 @@ const ContestContainer = styled.div`
   margin-top: 70px !important;
   cursor: pointer;
 `;
+const F = styled.div`
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 1px solid #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: lowercase;
+  font-size: 10px;
+  margin-right: 5px;
+`;
 const Contest = styled.div`
   padding: 20px 20px;
   border-radius: 5px;
@@ -67,7 +79,8 @@ const Last = styled.div`
 
 const tabs = [{ label: "winnings" }, { label: "leaderboard" }];
 
-export function ContestDetail({ contest }) {
+export function ContestDetail({ u, contest }) {
+  console.log({ contest });
   return (
     <>
       <ContestsContainer container>
@@ -79,12 +92,10 @@ export function ContestDetail({ contest }) {
                 <p>Entry</p>
               </First>
               <First>
-                <h1>{contest.price}</h1>
+                <h1>{contest.entryFeeWithoutDiscount}</h1>
                 <First>
-                  <del>₹ 19</del>
-                  <FreeButton>
-                    ₹ {Math.floor(contest.price / contest.totalSpots)}
-                  </FreeButton>
+                  <del>₹ {contest.entryFeeWithoutDiscount}</del>
+                  <FreeButton>₹ {contest.entryFee}</FreeButton>
                 </First>
               </First>
               <SliderContainer>
@@ -95,17 +106,19 @@ export function ContestDetail({ contest }) {
                 />
               </SliderContainer>
               <First>
-                <SpotsLeft>{contest.spotsLeft} spots left</SpotsLeft>
-                <SpotsRight>{contest.totalSpots} spots</SpotsRight>
+                {/* <SpotsLeft>{contest.spotsLeft} spots left</SpotsLeft> */}
+                {/* <SpotsRight>{contest.totalSpots} spots</SpotsRight> */}
               </First>
             </Contest>
             <Last>
-              ₹{Math.floor(contest.price / contest.totalSpots)}
+              <p style={{ display: "flex", alignItems: "center" }}>
+                <F>1st</F> {contest?.prizeDetails[0]?.prize}
+              </p>
               <EmojiEventsOutlinedIcon
                 style={{ margin: "0 15px", marginBottom: "3px" }}
               />
-              {Math.floor((contest.numWinners / contest.totalSpots) * 100)}%
-              Single
+              {contest.numWinners}
+              Winners
             </Last>
           </ContestContainer>
         )}

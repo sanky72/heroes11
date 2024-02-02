@@ -209,7 +209,7 @@ export function LeaderBoard({ leaderboard, contest }) {
             .map((f, index) => (
               <tr
                 className={f._doc.userId === user._id ? "selected" : ""}
-                onClick={() => navigate(`/savedteam/${f._doc._id}`)}
+                onClick={() => navigate(`/savedteam/${f._doc.team_id}`)}
                 style={{ cursor: "pointer" }}
               >
                 <td style={{ width: "200px !important" }} id="morewidth">
@@ -232,7 +232,7 @@ export function LeaderBoard({ leaderboard, contest }) {
                   </Profile>
                 </td>
                 <td>{f._doc.points}</td>
-                <td>#{index + 1}</td>
+                <td>#{f._doc.rank + 1}</td>
               </tr>
             ))}
       </table>

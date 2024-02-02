@@ -36,7 +36,6 @@ const LeftSide = styled.div`
 `;
 
 const RightSide = styled.div`
-  width: 190px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -133,9 +132,9 @@ export function JoinedContests({ players }) {
           <h1>Ban Vs Ind</h1>
         </LeftSide>
         <RightSide>
-          <Brightness1Icon />
+          {/* <Brightness1Icon /> */}
           <AccountBalanceWalletOutlinedIcon />
-          <NotificationAddOutlinedIcon />
+          {/* <NotificationAddOutlinedIcon /> */}
         </RightSide>
       </Top>
       <Bottom>
