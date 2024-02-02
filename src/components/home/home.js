@@ -187,7 +187,7 @@ export function Home() {
   }, [dispatch]);
 
   const initiateReferral = async () => {
-    const url = window.location.href + `?referral_id=${user._id}`;
+    const url = window.location.origin + `?referral_id=${user._id}`;
     setReferralLink(url);
     if (navigator.share) {
       navigator
