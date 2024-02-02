@@ -19,6 +19,7 @@ import ShowOver from "./showover";
 import { API } from "../actions/userAction";
 import { URL } from "../constants/userConstants";
 
+
 const TopContainer = styled.div`
   background-color: var(--black);
   color: #ffffff;
@@ -178,6 +179,8 @@ export function MatchDetails({ players }) {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
+  console.log("user data: ", {user})
+
   const { match_details, matchlive } = useSelector((state) => state.match);
   const [contests, setContests] = useState([]);
   const dispatch = useDispatch();
@@ -262,6 +265,10 @@ export function MatchDetails({ players }) {
                 </h1>
               )}
             </LeftSide>
+            <div >
+                <div style={{fontSize:"15px"}}>{state?.u.team_a} VS {state?.u.team_b}</div>
+                <div style={{fontSize:"12px"}}> start : {state?.u.match_start_time}   </div>
+              </div>
             <RightSide>
               <AccountBalanceWalletOutlinedIcon
                 onClick={() => handleClick()}
