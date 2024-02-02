@@ -11,13 +11,15 @@ import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-
 import db from "../firebase";
 import { showName } from "../utils/name";
 import MatchTabs from "./MatchTabs";
 import ShowOver from "./showover";
 import { API } from "../actions/userAction";
 import { URL } from "../constants/userConstants";
+import { getDisplayDate } from "../utils/dateformat";
+
+
 
 
 const TopContainer = styled.div`
@@ -32,7 +34,7 @@ const TopContainer = styled.div`
   }
   padding: 10px 20px;
   position: fixed;
-  height: 50px;
+  height: 80px;
   top: 0;
   left: 0;
   width: 100%;
@@ -62,7 +64,7 @@ const Top = styled.div`
 `;
 
 const Bottom = styled.div`
-  margin-top: 65px;
+  margin-top: 85px;
   z-index: 10;
 `;
 const LeftSide = styled.div`
@@ -190,6 +192,15 @@ export function MatchDetails({ players }) {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const [date, setDate] = useState();
+  useEffect(() => {
+    const i = setInterval(() => {
+      setDate(new Date());
+    }, 1000);
+    return () => {
+      clearInterval(i);
+    };
+  }, []);
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(true);
@@ -265,9 +276,11 @@ export function MatchDetails({ players }) {
                 </h1>
               )}
             </LeftSide>
+
+ 
             <div >
-                <div style={{fontSize:"15px"}}>{state?.u.team_a} VS {state?.u.team_b}</div>
-                <div style={{fontSize:"12px"}}> start : {state?.u.match_start_time}   </div>
+                <div style={{fontSize:"15px"} }>{state?.u.team_a} VS {state?.u.team_b}</div>
+                <div style={{fontSize:"12px",marginTop:"3px"}}> start : {getDisplayDate(state?.u.match_start_time, "i",date)}  </div>
               </div>
             <RightSide>
               <AccountBalanceWalletOutlinedIcon
