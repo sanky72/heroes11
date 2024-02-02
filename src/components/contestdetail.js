@@ -32,8 +32,8 @@ const Top = styled.div`
 `;
 
 const Bottom = styled.div`
-margin-top: 85px;
-z-index: 10;
+  margin-top: 85px;
+  z-index: 10;
 `;
 const LeftSide = styled.div`
   /* width: 150px; */
@@ -48,7 +48,6 @@ const LeftSide = styled.div`
 `;
 
 const RightSide = styled.div`
-  width: 190px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -82,6 +81,7 @@ const tabs = [{ label: "winnings" }, { label: "leaderboard" }];
 
 export function ContestDetail() {
   const { state } = useLocation();
+  console.log({ state });
   const [upcoming, setUpcoming] = useState([]);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [live, setLive] = useState([]);
@@ -130,20 +130,14 @@ export function ContestDetail() {
               </h1>
             )}
           </LeftSide>
+
           <RightSide>
-          <AccountBalanceWalletOutlinedIcon
-                onClick={() => handleClick()}
-                style={{
-                  cursor: "pointer",
-                  fontSize: "20px",
-                  stroke: "white",
-                  position: "absolute",
-                  marginLeft: "100px",
-                  strokeWidth: "1.5",
-                }}
-              />          </RightSide>
+            {/* <Brightness1Icon /> */}
+            <AccountBalanceWalletOutlinedIcon />
+            {/* <NotificationAddOutlinedIcon /> */}
+          </RightSide>
         </Top>
-        {contest && <Contest contest={contest} />}
+        {contest && <Contest u={state?.u} contest={contest} />}
       </ContestsContainer>
       <ContestTabs
         contest={contest}

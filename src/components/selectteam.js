@@ -123,7 +123,7 @@ const PrevButton = styled.button`
 `;
 
 const Top = styled.div`
-  background-image: url("localhost:3000/pitch.png");
+  background-image: url("./pitch.png");
   width: 100% !important;
   height: 200px !important;
   display: flex;

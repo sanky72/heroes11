@@ -19,9 +19,6 @@ import { API } from "../actions/userAction";
 import { URL } from "../constants/userConstants";
 import { getDisplayDate } from "../utils/dateformat";
 
-
-
-
 const TopContainer = styled.div`
   background-color: var(--black);
   color: #ffffff;
@@ -181,7 +178,7 @@ export function MatchDetails({ players }) {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.user
   );
-  console.log("user data: ", {user})
+  console.log("user data: ", { user });
 
   const { match_details, matchlive } = useSelector((state) => state.match);
   const [contests, setContests] = useState([]);
@@ -277,11 +274,22 @@ export function MatchDetails({ players }) {
               )}
             </LeftSide>
 
- 
-            <div >
-                <div style={{fontSize:"15px"} }>{state?.u.team_a} VS {state?.u.team_b}</div>
-                <div style={{fontSize:"12px",marginTop:"3px"}}> start : {getDisplayDate(state?.u.match_start_time, "i",date)}  </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <div style={{ fontSize: "15px" }}>
+                {state?.u.team_a} VS {state?.u.team_b}
               </div>
+              <div style={{ fontSize: "12px", marginTop: "3px" }}>
+                {" "}
+                {getDisplayDate(state?.u.match_start_time, "i", date)}{" "}
+              </div>
+            </div>
             <RightSide>
               <AccountBalanceWalletOutlinedIcon
                 onClick={() => handleClick()}
