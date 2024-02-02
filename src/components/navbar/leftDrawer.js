@@ -192,10 +192,10 @@ export default function LeftDrawer({ leftOpen, setLeftOpen, open, setOpen }) {
             Balance
           </ListI>
           <ListI onClick={() => handleLogout()}>
-            <LogoutIcon style={{ width: "60px"}} /> Logout
+            <LogoutIcon style={{ width: "60px" }} /> Logout
           </ListI>
-          <ListI style={{cursor: "no-drop" , background: "#dddddd"}} >
-            <BoyOutlined style={{ width: "60px"}} /> Find People
+          <ListI style={{ cursor: "no-drop", background: "#dddddd" }}>
+            <BoyOutlined style={{ width: "60px" }} /> Find People
           </ListI>
           <ListI onClick={() => navigate("/my-info")}>
             <SettingsOutlinedIcon style={{ width: "60px" }} />
@@ -208,6 +208,10 @@ export default function LeftDrawer({ leftOpen, setLeftOpen, open, setOpen }) {
           <ListI onClick={() => navigate("/termsAndConditions")}>
             <TopicOutlinedIcon style={{ width: "60px" }} />
             Terms & Conditions
+          </ListI>
+          <ListI onClick={() => navigate("/legality")}>
+            <TopicOutlinedIcon style={{ width: "60px" }} />
+            Legality
           </ListI>
           <ListI onClick={() => navigate("/privacyPolicy")}>
             <PrivacyTipOutlinedIcon style={{ width: "60px" }} />

@@ -127,7 +127,7 @@ export default function ConfirmModal({
           </FlexBox>
           <FlexBox>
             <h6>Entry</h6>
-            <h6>{modal.price / modal.totalSpots}</h6>
+            <h6>{modal.entryFee}</h6>
           </FlexBox>
           {/* <FlexBox>
             <h6>Apply 25 coupon</h6>
@@ -139,7 +139,7 @@ export default function ConfirmModal({
           </FlexBox>
           <FlexBox>
             <h3>To Pay</h3>
-            <h3>{modal.price / modal.totalSpots}</h3>
+            <h3>{modal.entryFee}</h3>
           </FlexBox>
 
           <Para>

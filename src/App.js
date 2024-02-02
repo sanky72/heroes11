@@ -36,6 +36,7 @@ import TermsAndConditions from "./components/termsAndConditions";
 import Test from "./components/test";
 import TransactionTabs from "./components/transaction";
 import Toast from "./shared/components/Toast";
+import Legality from "./components/legality";
 
 function App() {
   const dispatch = useDispatch();
@@ -111,6 +112,7 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/termsAndConditions" element={<TermsAndConditions />} />
+          <Route path="/legality" element={<Legality />} />
           <Route path="/refund" element={<Refund />} />
           <Route path="/helpAndSupport" element={<HelpAndSupport />} />
           <Route path="/more" element={<More />} />
