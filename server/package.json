@@ -49,5 +49,8 @@
   "type": "module",
   "devDependencies": {
     "nodemon": "^3.0.3"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
