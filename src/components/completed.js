@@ -434,13 +434,14 @@ export function Completed() {
                                   alignItems: "center",
                                 }}
                               >
-                                <span style={{ marginRight: "5px" }}>
-                                  {/* {u.away.code} */}
+                                {u.tournament_name}
+                                {/* <span style={{ marginRight: "5px" }}>
+                                  {u.team_a.name}
                                 </span>{" "}
                                 vs
                                 <span style={{ marginLeft: "5px" }}>
-                                  {/* {u.home.code} */}
-                                </span>
+                                  {u.team_b.name}
+                                </span> */}
                               </h5>
                               <NotificationAddOutlinedIcon
                                 style={{ fontSize: "18px" }}
