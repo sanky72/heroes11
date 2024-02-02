@@ -88,21 +88,22 @@ export function ContestDetail() {
   const [match, setMatch] = useState(null);
   const [contest, setContest] = useState(null);
   const { user } = useSelector((state) => state.user);
-  const { id } = useParams();
+  const { id, matchId } = useParams();
   const history = useNavigate();
 
   useEffect(() => {
     async function getteams() {
       if (id.length > 3) {
-        
-        const contestdata = await API.get(
-          `${URL}/match/contest/prizes/${id}`
+        const contestdata = await API.get(`${URL}/match/contest/prizes/${id}`);
+        const teamdata = await API.get(
+          `${URL}/match/leaderboard?contest_id=${id}&match_id=${matchId}`
         );
-        const teamdata = await API.get(`${URL}/match/leaderboard?contest_id=${id}&match_id=${contestdata?.data?.contest?.matchId}`);
         console.log("aekfbj", teamdata);
         setContest(contestdata.data.contest);
         // setMatch(teamdata.data.match);
-        const t = teamdata?.data?.contest?.teams.sort((a, b) => a.points - b.points);
+        const t = teamdata?.data?.contest?.teams.sort(
+          (a, b) => a.points - b.points
+        );
         setLeaderboard([...t]);
       }
     }

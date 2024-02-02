@@ -95,7 +95,10 @@ function App() {
           <Route path="/contests/:id" element={<Contests />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/savedteam/:id" element={<SavedTeam />} />
-          <Route path="/contestdetail/:id" element={<ContestDetail />} />
+          <Route
+            path="/contestdetail/:matchId/:id"
+            element={<ContestDetail />}
+          />
           <Route path="/joined" element={<JoinedContests />} />
           <Route path="/test" element={<Test />} />
           <Route path="/counter" element={<Counter />} />

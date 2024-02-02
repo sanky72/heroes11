@@ -482,11 +482,14 @@ export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
                 contest.map((tab) => (
                   <ContestContainerJ
                     onClick={() =>
-                      navigate(`/contestdetail/${tab.contestData._id}`, {
-                        state: {
-                          match_details: matchlive,
-                        },
-                      })
+                      navigate(
+                        `/contestdetail/${matchId}/${tab.contestData._id}`,
+                        {
+                          state: {
+                            match_details: matchlive,
+                          },
+                        }
+                      )
                     }
                   >
                     <ContestJ>
