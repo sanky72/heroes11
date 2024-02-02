@@ -254,7 +254,7 @@ export function MyInfo() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DateField"]}>
               <DatePicker
-                label="Basic date picker"
+                label="Date of Birth"
                 slotProps={{
                   textField: {
                     variant: "standard",
