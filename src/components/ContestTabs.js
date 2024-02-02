@@ -304,7 +304,7 @@ export default function ContestTabs({ contest, leaderboard, match_details }) {
                 .map((f, index) => (
                   <tr
                     className={f?.userId === user?._id ? "selected" : ""}
-                    onClick={() => navigate(`/savedteam/${f?._id}`)}
+                    onClick={() => navigate(`/savedteam/${f?.team_id}`)}
                     style={{ cursor: "pointer" }}
                   >
                     <td style={{ width: "200px !important" }} id="morewidth">
