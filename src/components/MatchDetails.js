@@ -283,7 +283,7 @@ export function MatchDetails({ players }) {
               }}
             >
               <div style={{ fontSize: "15px" }}>
-                {state?.u.team_a} VS {state?.u.team_b}
+                {state?.u.team_a} Vs {state?.u.team_b}
               </div>
               <div style={{ fontSize: "12px", marginTop: "3px" }}>
                 {" "}
