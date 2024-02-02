@@ -76,7 +76,7 @@ export default function ConfirmModal({
   };
   const join = async () => {
     try {
-      const entryFee = modal.price / modal.totalSpots;
+      const entryFee = modal.entryFee;
       await API.post(`${URL}/payment/deduct`, {
         amount: entryFee,
       });
