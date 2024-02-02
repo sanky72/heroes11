@@ -71,6 +71,7 @@
   },
   "scripts": {
     "start": "BROWSER=none DISABLE_ESLINT_PLUGIN=true REACT_APP_API=local react-scripts start",
+    "start1": "node server/src/app.js",
     "production": "REACT_APP_API=production react-scripts start",
     "dev": "REACT_APP_API=local react-scripts start",
     "start-server": "node server/src/app.js",
