@@ -73,6 +73,7 @@
     "start": "BROWSER=none DISABLE_ESLINT_PLUGIN=true REACT_APP_API=local react-scripts start",
     "production": "REACT_APP_API=production react-scripts start",
     "dev": "REACT_APP_API=local react-scripts start",
+    "start-server": "node server/src/app.js",
     "build": "REACT_APP_API=production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
