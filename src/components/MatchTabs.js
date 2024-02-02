@@ -500,8 +500,8 @@ export default function MatchTabs({ tabs, g, livescore, selectedTab = 0 }) {
                         <div>
                           <p>spots</p>
                           <p>
-                            {`${tab?.totalSpots - tab?.spotsLeft} /
-                             ${tab?.totalSpots}`}
+                            {`${tab?.contestData?.totalSpots - tab?.contestData?.spotsLeft} /
+                             ${tab?.contestData?.totalSpots}`}
                           </p>
                         </div>
                         <div>
