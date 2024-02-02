@@ -213,14 +213,12 @@ export function Home() {
           aria-labelledby="modal-referral"
         >
           <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Referral Link
-            </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               Refer to earn Rs. 25 and the person you refer get Rs. 50
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Referral link - {<a href={referralLink}>{referralLink}</a>}
+              <Button href={referralLink} >Referral link</Button>
+               {/* - {<a href={referralLink}>{referralLink}</a>} */}
             </Typography>
           </Box>
         </Modal>
