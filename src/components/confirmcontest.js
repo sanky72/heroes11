@@ -102,7 +102,12 @@ export default function ConfirmModal({
       setSelectedTeam(null);
       setOpen(false);
     } catch (e) {
-      window.store.dispatch(showToast(e.response.data.message, "Error"));
+      if (e?.response?.status === 402) {
+        window.store.dispatch(showToast("Insufficient funds", "error"));
+      } else {
+        window.store.dispatch(showToast(e.response.data.message, "error"));
+      }
+
       setOpen(false);
     }
   };

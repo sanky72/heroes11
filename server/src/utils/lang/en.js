@@ -72,4 +72,5 @@ export default {
   "00095": "Data saved successfully.",
   "00096": "Contest already joined",
   "00097": "Contest Joined Succesfully",
+  "00098": "Insufficient Funds",
 };

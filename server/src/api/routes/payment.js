@@ -31,24 +31,30 @@ router.post("/add", auth, async (req, res) => {
 
 router.post("/deduct", auth, async (req, res) => {
   const { amount } = req.body;
+  console.log(req.user._id);
 
   const user = await User.findOne({ _id: req.user._id }).catch((err) => {
     return res.status(500).json(errorHelper("00064", req, err.message));
   });
 
-  if (user?.wallet < +amount) {
+  console.log(amount, "now user: ", user);
+
+  const userWallet = user?.wallet;
+  const updatedAmount = userWallet - +amount;
+
+  if (updatedAmount < 0) {
     return res
-      .status(500)
-      .json(errorHelper("00064", req, "Amount can't exceed wallet amount"));
+      .status(402)
+      .json(errorHelper("00098", req, "Amount can't exceed wallet amount"));
   }
 
   const data = await User.updateOne(
     { _id: req.user._id },
     {
       $set: {
-        wallet: +amount,
+        wallet: updatedAmount,
       },
-    },
+    }
   ).catch((err) => {
     return res.status(500).json(errorHelper("00064", req, err.message));
   });
