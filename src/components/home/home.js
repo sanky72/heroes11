@@ -80,7 +80,10 @@ const DeatilTop = styled.div`
 `;
 
 const CricketBg = styled.div`
-  background-image: url("https://referandearns.in/wp-content/uploads/2022/06/image9-1.png");
+  background-image: url("./banner.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   box-sizing: border-box;
   padding: 10px 10px;
   height: 210px;
