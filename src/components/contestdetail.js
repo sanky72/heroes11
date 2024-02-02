@@ -24,14 +24,17 @@ const Top = styled.div`
   width: 100%;
   max-width: 550px;
   position: fixed;
-  height: 50px;
+  height: 80px;
   top: 0;
   left: 0;
   padding: 15px 20px;
   box-sizing: border-box;
 `;
 
-const Bottom = styled.div``;
+const Bottom = styled.div`
+margin-top: 85px;
+z-index: 10;
+`;
 const LeftSide = styled.div`
   /* width: 150px; */
   display: flex;
@@ -128,10 +131,17 @@ export function ContestDetail() {
             )}
           </LeftSide>
           <RightSide>
-            <Brightness1Icon />
-            <AccountBalanceWalletOutlinedIcon />
-            <NotificationAddOutlinedIcon />
-          </RightSide>
+          <AccountBalanceWalletOutlinedIcon
+                onClick={() => handleClick()}
+                style={{
+                  cursor: "pointer",
+                  fontSize: "20px",
+                  stroke: "white",
+                  position: "absolute",
+                  marginLeft: "100px",
+                  strokeWidth: "1.5",
+                }}
+              />          </RightSide>
         </Top>
         {contest && <Contest contest={contest} />}
       </ContestsContainer>

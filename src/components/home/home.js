@@ -84,7 +84,7 @@ const CricketBg = styled.div`
   box-sizing: border-box;
   padding: 10px 10px;
   height: 210px;
-  margin-bottom: 60px;
+  margin-bottom: 10px;
   position: relative;
   background-size: cover;
 `;
