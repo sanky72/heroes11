@@ -143,7 +143,7 @@ export function Navbar({ home }) {
       >
         <DetailTop>
           <p>Total balance</p>
-          <h5>₹{user && user.wallet}</h5>
+          <h5>₹{user && user.wallet.toFixed(2)}</h5>
         </DetailTop>
         <AddButton
           onClick={() =>
