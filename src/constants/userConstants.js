@@ -59,7 +59,7 @@ function geturl() {
     //return "https://backendforpuand-dream11.onrender.com";
     return "http://localhost:9000/api";
   } else {
-    return "https://backendforpuand-dream11.onrender.com";
+    return "httpshttps://heroes11backend-eb4d3ee70d29.herokuapp.com";
     //return "http://35.78.205.163";
   }
 }
